@@ -1,0 +1,23 @@
+{
+  "id": "test-delete-me-thread-path",
+  "kind": "thread",
+  "parent": null,
+  "title": "TEST delete me — thread path",
+  "from": "nick",
+  "created": "2026-07-19",
+  "status": "open",
+  "why": "",
+  "chips": [],
+  "flagNote": "",
+  "reads": [
+    {
+      "title": "TEST delete me — thread path",
+      "source": "",
+      "time": "~10 min",
+      "url": "https://example.com/test-read"
+    }
+  ],
+  "exchange": [],
+  "log": [],
+  "hook": "Does the issue-to-node pipeline actually work end to end?"
+}

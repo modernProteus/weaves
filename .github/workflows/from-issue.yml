@@ -23,7 +23,9 @@ jobs:
           ISSUE_BODY: ${{ github.event.issue.body }}
           ISSUE_TITLE: ${{ github.event.issue.title }}
           ISSUE_LABELS: ${{ join(github.event.issue.labels.*.name, ',') }}
-        run: echo "id=$(node scripts/from-issue.mjs)" >> "$GITHUB_OUTPUT"
+        run: |
+          id=$(node scripts/from-issue.mjs)
+          echo "id=$id" >> "$GITHUB_OUTPUT"
 
       # Something didn't clear its gate. Say what and why, leave the issue open to fix.
       - if: steps.make.outcome == 'failure'

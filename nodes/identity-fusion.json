@@ -1,0 +1,32 @@
+{
+  "id": "identity-fusion",
+  "kind": "thread",
+  "parent": null,
+  "title": "Identity Fusion",
+  "from": "nick",
+  "created": "2026-07-19",
+  "status": "open",
+
+  "why": "There's a name for the thing where someone takes an argument about policy as an attack on their person. It's a measurable construct with 15 years of field data behind it, and the finding that matters runs opposite to intuition.",
+
+  "hook": "Why does making someone feel personally threatened make them more loyal to the group, not less?",
+
+  "inspiration": {
+    "kind": "reel",
+    "what": "An IG reel on political identity that sent me looking for the actual research",
+    "url": "https://www.instagram.com/reel/DXeHWiWsN6l/"
+  },
+
+  "reads": [
+    {
+      "title": "Identity Fusion",
+      "source": "Swann & Buhrmester, 2015 · pp. 52–54",
+      "time": "~8 min",
+      "url": "https://labs.la.utexas.edu/swann/files/2016/03/52-57.pdf"
+    }
+  ],
+
+  "flagNote": "Words that import the verdict into the premise. Cheaper to name now than to untangle later.",
+
+  "chips": ["extremism", "radicalized", "cult", "brainwashed", "tribalism"]
+}

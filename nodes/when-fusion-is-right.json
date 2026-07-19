@@ -1,0 +1,21 @@
+{
+  "id": "when-fusion-is-right",
+  "kind": "bookshelf",
+  "parent": "identity-fusion",
+  "title": "When the fusion is right and the collaboration is wrong",
+  "from": "nick",
+  "created": "2026-07-19",
+  "status": "draft",
+
+  "why": "Any toolkit for noticing fusion assumes the collaboration is the good and the fusion is the obstacle. Sometimes that's inverted. A tool that can only ever recommend more dialogue is a compliance instrument with good manners on it.",
+
+  "question": "If fusion can be the correct response to something genuinely threatening, how does a tool for noticing it avoid becoming a device for talking people out of warranted loyalty?",
+
+  "fallback": "Build the detection side only, self-facing, with no recommendation layer at all. It notices heat and names it. What you do next stays entirely with the person holding it.",
+
+  "reads": [],
+  "chips": ["healthy", "unhealthy", "pathology", "irrational"],
+  "flagNote": "Every one of these smuggles in a verdict about whose commitments are legitimate.",
+
+  "exchange": []
+}

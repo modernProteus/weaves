@@ -1,0 +1,90 @@
+name: Branch — workbench or bookshelf
+description: Something came out of an existing thread. Build it, or hold the question open.
+title: "Branch: "
+labels: ["cq", "branch"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A branch always comes off something. Whether it's a **workbench** or a **bookshelf**
+        depends on one test:
+
+        - Can you name the action? → **workbench**
+        - Can you name a question the work can't answer by working harder? → **bookshelf**
+        - Both? → **workbench first.** Errors here aren't symmetric. Building when you
+          should have thought costs one wasted build, and the wasted build usually
+          sharpens the question. Thinking when you should have built costs you the
+          questions you'd only have found by building.
+
+  - type: input
+    id: parent
+    attributes:
+      label: Comes off which node
+      description: "Required — the id from its URL. /n/identity-fusion/ means the id is identity-fusion."
+      placeholder: identity-fusion
+    validations: { required: true }
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Workbench or bookshelf
+      options: [workbench, bookshelf]
+    validations: { required: true }
+
+  - type: input
+    id: title
+    attributes:
+      label: Title
+      description: Required — the label in the queue.
+    validations: { required: true }
+
+  - type: textarea
+    id: action
+    attributes:
+      label: "Workbench only — the action"
+      description: >-
+        Required for a workbench. Finish the sentence "we should build a thing that ___".
+        "We should build something" doesn't clear the gate; if you can't finish the
+        sentence you're still broadening, and that's fine, just add reads to the parent
+        instead.
+      placeholder: a self-facing heat-noticing prompt that names the signal without recommending anything
+
+  - type: textarea
+    id: question
+    attributes:
+      label: "Bookshelf only — the question held open"
+      description: >-
+        Required for a bookshelf. The thing the work genuinely can't resolve by working
+        harder. Not "this is interesting" and not "we disagree" — a specific question.
+      placeholder: If fusion can be the correct response to a real threat, how does the tool avoid talking people out of warranted loyalty?
+
+  - type: textarea
+    id: fallback
+    attributes:
+      label: "Bookshelf only — what you'd build if the answer never came"
+      description: >-
+        Required for a bookshelf, and it's the load-bearing one. You may only send a
+        question up if you can also say what you'd ship without the answer. It keeps
+        the bookshelf from becoming an escape hatch from a hard build decision, which is
+        the failure mode here because deferral dressed as depth feels exactly like rigor
+        from the inside.
+      placeholder: Ship the detection half only, self-facing, no recommendation layer.
+
+  - type: textarea
+    id: why
+    attributes:
+      label: Why this
+      description: Optional. Context for whoever reads it in three months.
+
+  - type: input
+    id: chips
+    attributes:
+      label: Trap terms
+      description: Optional. Comma separated.
+
+  - type: dropdown
+    id: from
+    attributes:
+      label: From
+      options: [nick, jeremy]
+    validations: { required: true }

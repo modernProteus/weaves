@@ -1,0 +1,17 @@
+{
+  "siteName": "Weaves",
+  "tagline": "spark · thread · workbench · bookshelf",
+
+  "baseUrl": "https://YOURNAME.github.io/weaves",
+
+  "repo": "YOURNAME/weaves",
+
+  "replyTo": "",
+
+  "staleAfterDays": 90,
+
+  "people": {
+    "nick": "Nick",
+    "jeremy": "Jeremy"
+  }
+}

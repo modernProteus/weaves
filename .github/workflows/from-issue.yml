@@ -1,0 +1,62 @@
+name: Node from issue
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  create:
+    if: contains(github.event.issue.labels.*.name, 'cq')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+
+      - id: make
+        continue-on-error: true
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_LABELS: ${{ join(github.event.issue.labels.*.name, ',') }}
+        run: echo "id=$(node scripts/from-issue.mjs)" >> "$GITHUB_OUTPUT"
+
+      # Something didn't clear its gate. Say what and why, leave the issue open to fix.
+      - if: steps.make.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require("fs");
+            const why = fs.existsSync(".cq-errors") ? fs.readFileSync(".cq-errors", "utf8") : "Unknown.";
+            await github.rest.issues.createComment({
+              ...context.repo, issue_number: context.issue.number,
+              body: `Not created yet — one of the gates isn't satisfied:\n\n${why}\n\nEdit the issue and close-then-reopen it, or just open a new one.`
+            });
+
+      - if: steps.make.outcome == 'success'
+        run: |
+          git config user.name "cq-bot"
+          git config user.email "cq-bot@users.noreply.github.com"
+          git add nodes/
+          git commit -m "cq: ${{ steps.make.outputs.id }}"
+          git push
+
+      - if: steps.make.outcome == 'success'
+        uses: actions/github-script@v7
+        env:
+          ID: ${{ steps.make.outputs.id }}
+        with:
+          script: |
+            const base = require("./weaves.config.json").baseUrl.replace(/\/+$/, "");
+            const link = `${base}/n/${process.env.ID}/`;
+            await github.rest.issues.createComment({
+              ...context.repo, issue_number: context.issue.number,
+              body: `Live in about a minute:\n\n${link}\n\nPaste that into Messages. The preview shows the title and the question.`
+            });
+            await github.rest.issues.update({
+              ...context.repo, issue_number: context.issue.number, state: "closed"
+            });

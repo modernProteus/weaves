@@ -1,0 +1,112 @@
+name: New thread
+description: Offer someone a read and a question. Two minutes, three required fields.
+title: "Thread: "
+labels: ["cq", "thread"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Three fields are required.** Everything else you can skip and add later.
+
+        A thread is one read plus one question. That's the whole shape. If you have
+        several reads you want to put in tension with each other, still start here —
+        add the rest afterward and it becomes a broadening on its own.
+
+  - type: input
+    id: title
+    attributes:
+      label: Title
+      description: "Required — it's the headline on the text-message preview card and the label in the queue. Short is better. A noun phrase, not a sentence."
+      placeholder: Identity Fusion
+    validations: { required: true }
+
+  - type: input
+    id: read_url
+    attributes:
+      label: Link to the read
+      description: "Required — a thread without a read is just an opinion. Paste the URL of the thing you want them to actually read or watch."
+      placeholder: https://
+    validations: { required: true }
+
+  - type: textarea
+    id: hook
+    attributes:
+      label: The question
+      description: >-
+        Required — this is the offer, and it's the line that shows under the link in
+        Messages. It's the only thing they see before deciding whether to open it.
+        One sentence, ending in a question mark. Aim for something you can't answer
+        from the title alone.
+      placeholder: Why does making someone feel personally threatened make them more loyal to the group, not less?
+    validations: { required: true }
+
+  - type: markdown
+    attributes:
+      value: "---\n**Everything below is optional.** Skip the lot and it still works."
+
+  - type: textarea
+    id: why
+    attributes:
+      label: Why this
+      description: A sentence or two of pitch. What makes it worth eight minutes.
+
+  - type: input
+    id: inspiration_what
+    attributes:
+      label: Sparked by
+      description: >-
+        Where this actually came from, which is often not the read itself. A reel, a
+        podcast, an argument, a shower thought. Kept separate from the read on purpose
+        so the catchiest thing doesn't crowd out the best thing.
+      placeholder: An IG reel on political identity
+
+  - type: dropdown
+    id: inspiration_kind
+    attributes:
+      label: Sparked by — what kind
+      options: [reel, video, article, paper, podcast, book, conversation, argument, thought, other]
+
+  - type: input
+    id: inspiration_url
+    attributes:
+      label: Sparked by — link
+      description: Only if it has one. "Something Jeremy said at dinner" is a perfectly good source.
+
+  - type: input
+    id: read_title
+    attributes:
+      label: What the read is called
+      description: Defaults to the thread title if you leave it.
+
+  - type: input
+    id: read_source
+    attributes:
+      label: Source line
+      placeholder: "Swann & Buhrmester, 2015 · pp. 52–54"
+
+  - type: input
+    id: read_time
+    attributes:
+      label: How long it takes
+      placeholder: "~8 min"
+
+  - type: input
+    id: chips
+    attributes:
+      label: Trap terms
+      description: >-
+        Comma separated. Words that import the verdict into the premise, so naming
+        them up front is cheaper than untangling them mid-argument.
+      placeholder: extremism, cult, tribalism
+
+  - type: input
+    id: flag_note
+    attributes:
+      label: Note on the traps
+
+  - type: dropdown
+    id: from
+    attributes:
+      label: From
+      options: [nick, jeremy]
+    validations: { required: true }

@@ -15,7 +15,11 @@ const T = p => readFileSync(join(root, "templates", p), "utf8");
 const esc = s => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const attr = s => esc(s).replace(/"/g, "&quot;");
 const fill = (t, m) => t.replace(/\{\{(\w+)\}\}/g, (x, k) => (k in m ? m[k] : x));
-const who = k => cfg.people?.[k] || k || "—";
+// people entries may be a plain name or { name, contact }
+const person = k => { const v = cfg.people?.[k]; return typeof v === "string" ? { name: v } : (v || {}); };
+const who = k => person(k).name || k || "—";
+// replies go to whoever authored the node, not to a single global address
+const contactOf = k => person(k).contact || cfg.replyTo || "";
 const days = iso => Math.floor((Date.now() - new Date(iso + "T00:00:00Z")) / 864e5);
 const age = n => n <= 0 ? "today" : n === 1 ? "1 day" : n < 30 ? `${n} days`
   : n < 60 ? "1 month" : `${Math.floor(n / 30)} months`;
@@ -164,7 +168,7 @@ function body(n) {
   const c = childrenBlock(n); if (c) P.push(`<hr class="rule">${c}`);
 
   if (isThread) P.push(`<hr class="rule"><p class="label">No reply needed</p>
-    <div class="replies" id="replies" data-title="${attr(n.title)}" data-reply-to="${attr(cfg.replyTo || "")}">
+    <div class="replies" id="replies" data-title="${attr(n.title)}" data-reply-to="${attr(contactOf(n.from))}">
       <a class="reply warm" data-msg="bite">Bite</a>
       <a class="reply" data-msg="park it">Park it</a>
       <a class="reply" data-msg="pass">Pass</a>
@@ -216,16 +220,32 @@ mkdirSync(out, { recursive: true });
 for (const f of ["cq.css", "cq.js"]) cpSync(join(root, "templates", f), join(out, f));
 // Only claim an image if one actually exists. A 404 og:image degrades the card
 // in some clients; omitting it gives a clean text preview instead.
-const hasCard = existsSync(join(root, "assets", "card.png"));
-if (hasCard) cpSync(join(root, "assets", "card.png"), join(out, "card.png"));
+//
+// Shape decides the layout the client renders. A square reads as a compact card
+// (icon left, title and question right, text as the focus). A wide one forces the
+// big banner-on-top form. Read it from the PNG header rather than hardcoding.
+const cardPath = join(root, "assets", "card.png");
+const hasCard = existsSync(cardPath);
+if (hasCard) cpSync(cardPath, join(out, "card.png"));
 
-const OG_IMAGE = hasCard
-  ? `<meta property="og:image" content="${BASE}/card.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">`
-  : `<meta name="twitter:card" content="summary">`;
-writeFileSync(join(out, ".nojekyll"), "");
+function pngSize(p) {
+  const b = readFileSync(p);
+  return { w: b.readUInt32BE(16), h: b.readUInt32BE(20) };
+}
+
+let OG_IMAGE = `<meta name="twitter:card" content="summary">`;
+if (hasCard) {
+  const { w, h } = pngSize(cardPath);
+  const wide = w / h > 1.4;
+  OG_IMAGE = [
+    `<meta property="og:image" content="${BASE}/card.png">`,
+    `<meta property="og:image:width" content="${w}">`,
+    `<meta property="og:image:height" content="${h}">`,
+    `<meta property="og:image:alt" content="A single thread coiling inward around a question">`,
+    `<meta name="twitter:card" content="${wide ? "summary_large_image" : "summary"}">`
+  ].join("\n");
+  console.log(`card.png ${w}x${h} -> ${wide ? "large banner" : "compact card"}`);
+}
 
 const shell = T("page.html");
 

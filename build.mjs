@@ -214,7 +214,17 @@ const out = join(root, "dist");
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
 for (const f of ["cq.css", "cq.js"]) cpSync(join(root, "templates", f), join(out, f));
-if (existsSync(join(root, "assets", "card.png"))) cpSync(join(root, "assets", "card.png"), join(out, "card.png"));
+// Only claim an image if one actually exists. A 404 og:image degrades the card
+// in some clients; omitting it gives a clean text preview instead.
+const hasCard = existsSync(join(root, "assets", "card.png"));
+if (hasCard) cpSync(join(root, "assets", "card.png"), join(out, "card.png"));
+
+const OG_IMAGE = hasCard
+  ? `<meta property="og:image" content="${BASE}/card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">`
+  : `<meta name="twitter:card" content="summary">`;
 writeFileSync(join(out, ".nojekyll"), "");
 
 const shell = T("page.html");
@@ -222,7 +232,7 @@ const shell = T("page.html");
 for (const n of nodes) {
   mkdirSync(join(out, "n", n.id), { recursive: true });
   writeFileSync(join(out, "n", n.id, "index.html"), fill(shell, {
-    BASE, URL: `${BASE}/n/${n.id}/`,
+    BASE, OG_IMAGE, URL: `${BASE}/n/${n.id}/`,
     TITLE_ATTR: attr(n.title),
     DESC_ATTR: attr(n.hook || n.action || n.question || n.why || ""),
     KIND_LABEL: attr(KINDS[n.kind].label),
@@ -232,7 +242,7 @@ for (const n of nodes) {
 }
 
 writeFileSync(join(out, "index.html"), fill(shell, {
-  BASE, URL: `${BASE}/`,
+  BASE, OG_IMAGE, URL: `${BASE}/`,
   TITLE_ATTR: "Threads",
   DESC_ATTR: attr(`${openRoots} open. Nothing owed.`),
   KIND_LABEL: "Weaves",

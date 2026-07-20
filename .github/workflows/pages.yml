@@ -32,10 +32,10 @@ jobs:
 
       - run: node build.mjs
 
-      # per-node preview cards: title and question composited onto the drawing,
+      # per-node : title and question composited onto the drawing,
       # then the same layout with the animation playing in place of the still.
       # runs after build.mjs, which wipes dist/ before writing.
-      - name: Preview cards
+      - name:
         env:
           CQ_VIDEO_CARDS: "1"
         run: |

@@ -247,12 +247,33 @@ if (hasCard) {
   console.log(`card.png ${w}x${h} -> ${wide ? "large banner" : "compact card"}`);
 }
 
+// Experiment: iMessage documents og:video with MP4 as the path to motion,
+// since GIFs render as a first frame only. Support is inconsistent, so og:image
+// stays as the fallback and every client that ignores this still gets a card.
+const videoPath = join(root, "assets", "spark.mp4");
+const hasVideo = existsSync(videoPath);
+if (hasVideo) cpSync(videoPath, join(out, "spark.mp4"));
+
+let OG_VIDEO = "";
+if (hasVideo) {
+  const vw = cfg.video?.width ?? 1200;
+  const vh = cfg.video?.height ?? 1200;
+  OG_VIDEO = "\n" + [
+    `<meta property="og:video" content="${BASE}/spark.mp4">`,
+    `<meta property="og:video:secure_url" content="${BASE}/spark.mp4">`,
+    `<meta property="og:video:type" content="video/mp4">`,
+    `<meta property="og:video:width" content="${vw}">`,
+    `<meta property="og:video:height" content="${vh}">`
+  ].join("\n");
+  console.log(`spark.mp4 present -> og:video ${vw}x${vh}`);
+}
+
 const shell = T("page.html");
 
 for (const n of nodes) {
   mkdirSync(join(out, "n", n.id), { recursive: true });
   writeFileSync(join(out, "n", n.id, "index.html"), fill(shell, {
-    BASE, OG_IMAGE, URL: `${BASE}/n/${n.id}/`,
+    BASE, OG_IMAGE, OG_VIDEO, URL: `${BASE}/n/${n.id}/`,
     TITLE_ATTR: attr(n.title),
     DESC_ATTR: attr(n.hook || n.action || n.question || n.why || ""),
     KIND_LABEL: attr(KINDS[n.kind].label),
@@ -262,7 +283,7 @@ for (const n of nodes) {
 }
 
 writeFileSync(join(out, "index.html"), fill(shell, {
-  BASE, OG_IMAGE, URL: `${BASE}/`,
+  BASE, OG_IMAGE, OG_VIDEO, URL: `${BASE}/`,
   TITLE_ATTR: "Threads",
   DESC_ATTR: attr(`${openRoots} open. Nothing owed.`),
   KIND_LABEL: "Weaves",

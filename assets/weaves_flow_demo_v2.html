@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weaves — flow demo v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --indigo:#131A2E; --linen:#EDE6D8; --madder:#BE4438; --ochre:#B89230;
+    --stage:min(640px,94vw);
+    --mono:"Space Mono",ui-monospace,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--indigo);color:var(--linen);font-family:"Fraunces",Georgia,serif;min-height:100vh;overflow-x:hidden}
+  .stage{position:relative;width:var(--stage);margin:0 auto;min-height:100vh}
+  svg#loom{position:absolute;top:0;left:0;width:100%;aspect-ratio:1/1;pointer-events:none;z-index:2;overflow:visible}
+
+  .view{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .3s ease;z-index:1}
+  .view.on{opacity:1;pointer-events:auto}
+
+  .eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.32em;color:var(--ochre);margin-bottom:.9rem}
+  h1{font-weight:400;font-size:clamp(1.35rem,4.8vw,2.1rem);line-height:1.3}
+
+  #vIndex .inner{padding:calc(var(--stage)*0.14) calc(var(--stage)*0.11) 3rem}
+  .brand{font-size:1.1rem;margin-bottom:2.6rem}
+  .spark-row{display:flex;align-items:center;gap:1rem;padding:1.05rem 0;border-bottom:1px solid rgba(237,230,216,.12);cursor:pointer}
+  .mark{width:12px;height:12px;flex:none}
+  .mark.dot{background:var(--madder);border-radius:50%}
+  .mark.square{background:var(--ochre);border-radius:0}
+  .spark-row .q{font-size:1.02rem;line-height:1.35}
+  .spark-row .meta{font-family:var(--mono);font-size:.62rem;opacity:.45;margin-left:auto;flex:none;text-align:right}
+  .spark-row.dim{opacity:.35;cursor:default}
+  .spark-row:not(.dim):hover .q{color:var(--ochre)}
+  .foot{margin-top:3rem;font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;display:flex;gap:2rem}
+  .foot span{opacity:.5;cursor:pointer}
+  .foot span:hover{opacity:1;color:var(--ochre)}
+
+  #vSpark .inner{padding:calc(var(--stage)*0.48) calc(var(--stage)*0.11) 3rem}
+  #vSpark .eyebrow,#vSpark h1,#vSpark .actions{opacity:0;transform:translateY(10px);transition:opacity .6s ease,transform .6s ease}
+  #vSpark.arrived .eyebrow{opacity:1;transform:none;transition-delay:.05s}
+  #vSpark.arrived h1{opacity:1;transform:none;transition-delay:.18s}
+  #vSpark.arrived .actions{opacity:1;transform:none;transition-delay:.42s}
+  .actions{margin-top:2.2rem;display:flex;gap:1.4rem;align-items:center}
+  .btn{background:none;border:1px solid var(--ochre);color:var(--linen);font-family:var(--mono);font-size:.85rem;padding:.55rem 1.1rem;cursor:pointer}
+  .btn:hover{background:var(--ochre);color:var(--indigo)}
+  .ghost{background:none;border:none;color:var(--linen);opacity:.5;font-family:var(--mono);font-size:.8rem;cursor:pointer}
+  .ghost:hover{opacity:.9}
+
+  #vThread .inner{padding:calc(var(--stage)*0.44) calc(var(--stage)*0.11) 3rem}
+  #vThread .eyebrow,#vThread h1,#vThread .spine{opacity:0;transform:translateY(10px);transition:opacity .6s ease,transform .6s ease}
+  #vThread.arrived .eyebrow{opacity:1;transform:none;transition-delay:.05s}
+  #vThread.arrived h1{opacity:1;transform:none;transition-delay:.18s}
+  #vThread.arrived .spine{opacity:.7;transform:none;transition-delay:.5s}
+  .spine{margin-top:2.6rem;font-family:var(--mono);font-size:.65rem;letter-spacing:.14em;display:flex;gap:.9rem;align-items:center}
+  .spine .back{cursor:pointer;opacity:.6}
+  .spine .back:hover{opacity:1;color:var(--ochre)}
+
+  .flight{position:fixed;background:var(--madder);border-radius:50%;z-index:10;pointer-events:none}
+
+  @media (prefers-reduced-motion:reduce){
+    .view,#vSpark .eyebrow,#vSpark h1,#vSpark .actions,
+    #vThread .eyebrow,#vThread h1,#vThread .spine{transition:none}
+  }
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <svg id="loom" viewBox="0 0 640 640" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <filter id="fiber" x="-20%" y="-20%" width="140%" height="140%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="n"/>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="5"/>
+      </filter>
+      <mask id="tailMask">
+        <path id="tailReveal" fill="none" stroke="#fff" stroke-width="34" stroke-linecap="round"
+          d="M 400 240 C 375 244 340 250 290 262 C 200 285 90 310 -60 300"/>
+      </mask>
+      <mask id="travelMask">
+        <path id="travelReveal" fill="none" stroke="#fff" stroke-width="34" stroke-linecap="round"
+          d="M 400 240 C 470 258 545 300 610 355 C 660 398 668 470 705 560"/>
+      </mask>
+      <mask id="snakeMask">
+        <path id="snakeReveal" fill="none" stroke="#fff" stroke-width="38" stroke-linecap="round"
+          d="M 665 25 C 555 45 435 70 380 140 L 300 140 C 273 140 273 170 300 170 L 380 170 C 407 170 407 200 380 200 L 300 200 C 273 200 273 230 300 230 L 380 230"/>
+      </mask>
+    </defs>
+
+    <!-- the spark and its off-frame attachment -->
+    <g id="sparkGroup" style="visibility:hidden">
+      <g mask="url(#tailMask)" filter="url(#fiber)">
+        <path fill="none" stroke="#B89230" stroke-width="24" stroke-linecap="round"
+          d="M -60 300 C 90 310 200 285 290 262 C 340 250 375 244 400 240"/>
+        <path fill="none" stroke="#8A6B1E" stroke-width="22" stroke-linecap="butt" stroke-dasharray="7 13" opacity="0.55"
+          d="M -60 300 C 90 310 200 285 290 262 C 340 250 375 244 400 240"/>
+        <path fill="none" stroke="#D2B054" stroke-width="22" stroke-linecap="butt" stroke-dasharray="7 13" stroke-dashoffset="10" opacity="0.35"
+          d="M -60 300 C 90 310 200 285 290 262 C 340 250 375 244 400 240"/>
+      </g>
+      <g filter="url(#fiber)">
+        <circle id="spark" cx="400" cy="240" r="17" fill="#BE4438"/>
+      </g>
+    </g>
+
+    <!-- bite travel: the hidden length pays out -->
+    <g id="travelGroup" style="visibility:hidden">
+      <g mask="url(#travelMask)" filter="url(#fiber)">
+        <path fill="none" stroke="#B89230" stroke-width="24" stroke-linecap="round"
+          d="M 400 240 C 470 258 545 300 610 355 C 660 398 668 470 705 560"/>
+        <path fill="none" stroke="#8A6B1E" stroke-width="22" stroke-linecap="butt" stroke-dasharray="7 13" opacity="0.55"
+          d="M 400 240 C 470 258 545 300 610 355 C 660 398 668 470 705 560"/>
+        <path fill="none" stroke="#D2B054" stroke-width="22" stroke-linecap="butt" stroke-dasharray="7 13" stroke-dashoffset="10" opacity="0.35"
+          d="M 400 240 C 470 258 545 300 610 355 C 660 398 668 470 705 560"/>
+      </g>
+      <g filter="url(#fiber)">
+        <circle id="travelSpark" cx="400" cy="240" r="17" fill="#BE4438" visibility="hidden"/>
+      </g>
+    </g>
+
+    <!-- thread arrival: weft accumulating into its lineage mark -->
+    <g id="snakeGroup" style="visibility:hidden">
+      <g mask="url(#snakeMask)" filter="url(#fiber)">
+        <path fill="none" stroke="#B89230" stroke-width="30" stroke-linecap="round"
+          d="M 665 25 C 555 45 435 70 380 140 L 300 140 C 273 140 273 170 300 170 L 380 170 C 407 170 407 200 380 200 L 300 200 C 273 200 273 230 300 230 L 380 230"/>
+        <path fill="none" stroke="#8A6B1E" stroke-width="28" stroke-linecap="butt" stroke-dasharray="8 14" opacity="0.5"
+          d="M 665 25 C 555 45 435 70 380 140 L 300 140 C 273 140 273 170 300 170 L 380 170 C 407 170 407 200 380 200 L 300 200 C 273 200 273 230 300 230 L 380 230"/>
+        <path fill="none" stroke="#D2B054" stroke-width="28" stroke-linecap="butt" stroke-dasharray="8 14" stroke-dashoffset="11" opacity="0.3"
+          d="M 665 25 C 555 45 435 70 380 140 L 300 140 C 273 140 273 170 300 170 L 380 170 C 407 170 407 200 380 200 L 300 200 C 273 200 273 230 300 230 L 380 230"/>
+      </g>
+      <g filter="url(#fiber)">
+        <circle id="snakeSpark" cx="665" cy="25" r="15" fill="#BE4438" visibility="hidden"/>
+      </g>
+    </g>
+  </svg>
+
+  <section class="view on" id="vIndex">
+    <div class="inner">
+      <p class="brand">Weaves</p>
+      <div class="spark-row" id="row1">
+        <span class="mark dot" id="row1mark"></span>
+        <span class="q">Does the warp remember the weft, or only its own tension?</span>
+        <span class="meta" id="row1meta">SPARK 01</span>
+      </div>
+      <div class="spark-row dim">
+        <span class="mark dot"></span>
+        <span class="q">Is a protocol a machine or a promise?</span>
+        <span class="meta">SPARK 02</span>
+      </div>
+      <div class="spark-row dim">
+        <span class="mark dot"></span>
+        <span class="q">What does a measurement owe the thing it measured?</span>
+        <span class="meta">SPARK 03</span>
+      </div>
+      <p class="foot">
+        <span id="directBtn">SIMULATE DIRECT ARRIVAL &rarr;</span>
+        <span id="resetBtn">RESET DEMO</span>
+      </p>
+    </div>
+  </section>
+
+  <section class="view" id="vSpark">
+    <div class="inner">
+      <p class="eyebrow">SPARK · 01</p>
+      <h1>Does the warp remember the weft, or only its own tension?</h1>
+      <div class="actions">
+        <button class="btn" id="biteBtn">bite &rarr;</button>
+        <button class="ghost" id="passBtn">let it pass</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="vThread">
+    <div class="inner">
+      <p class="eyebrow">THREAD · 01 · CAUGHT</p>
+      <h1>The reading, the volley, and everything the weft has laid down so far.</h1>
+      <p class="spine"><span>LINEAGE&nbsp;&nbsp;&#9632;</span><span class="back" id="backBtn">&larr; INDEX</span></p>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var sparkGroup=$('sparkGroup'),travelGroup=$('travelGroup'),snakeGroup=$('snakeGroup');
+  var spark=$('spark'),travelSpark=$('travelSpark'),snakeSpark=$('snakeSpark');
+  var tailReveal=$('tailReveal'),travelReveal=$('travelReveal'),snakeReveal=$('snakeReveal');
+  var views={index:$('vIndex'),spark:$('vSpark'),thread:$('vThread')};
+  var reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // record state: bite is a protocol event; in production this lives on the
+  // record server-side so both participants see the same status.
+  var state={s1:'spark'};
+
+  var LT=tailReveal.getTotalLength();
+  var LV=travelReveal.getTotalLength();
+  var LS=snakeReveal.getTotalLength();
+
+  function show(name){Object.keys(views).forEach(function(k){views[k].classList.toggle('on',k===name);});}
+  function easeIO(t){return t<0.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;}
+  function easeIn(t){return t*t*t;}
+  function easeOutBack(t){var c=1.3;return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2);}
+  function tween(dur,step,done){
+    if(reduced){step(1);if(done)done();return;}
+    var s=null;
+    function f(now){
+      if(!s)s=now;
+      var t=Math.min(1,(now-s)/dur);
+      step(t);
+      if(t<1)requestAnimationFrame(f);else if(done)done();
+    }
+    requestAnimationFrame(f);
+  }
+
+  function hideAllThread(){
+    sparkGroup.style.visibility='hidden';
+    travelGroup.style.visibility='hidden';
+    snakeGroup.style.visibility='hidden';
+    travelSpark.setAttribute('visibility','hidden');
+    snakeSpark.setAttribute('visibility','hidden');
+  }
+
+  // ---- spark arrival, direct: spark + tail slide in from off-frame and settle
+  function arriveDirect(){
+    show('spark');
+    views.spark.classList.remove('arrived');
+    hideAllThread();
+    tailReveal.style.strokeDasharray='';
+    tailReveal.style.strokeDashoffset='';
+    sparkGroup.style.visibility='visible';
+    tween(750,function(t){
+      var e=easeOutBack(t);
+      sparkGroup.setAttribute('transform','translate('+((1-e)*-460)+' 0)');
+    },function(){
+      sparkGroup.setAttribute('transform','');
+      views.spark.classList.add('arrived');
+    });
+  }
+
+  // ---- spark arrival, from index: the row's dot flies to position,
+  //      then the attachment pays out behind it
+  function arriveFromIndex(rowMark){
+    var stageEl=$('stage');
+    var srect=stageEl.getBoundingClientRect();
+    var scale=srect.width/640;
+    var mrect=rowMark.getBoundingClientRect();
+    var endX=srect.left+400*scale, endY=srect.top+240*scale;
+    var endD=34*scale;
+
+    var fl=document.createElement('div');
+    fl.className='flight';
+    fl.style.left=(mrect.left+mrect.width/2)+'px';
+    fl.style.top=(mrect.top+mrect.height/2)+'px';
+    fl.style.width='12px';fl.style.height='12px';
+    fl.style.transform='translate(-50%,-50%)';
+    document.body.appendChild(fl);
+
+    views.index.classList.remove('on');
+
+    if(reduced){document.body.removeChild(fl);arriveDirect();return;}
+
+    var anim=fl.animate([
+      {left:fl.style.left,top:fl.style.top,width:'12px',height:'12px'},
+      {left:endX+'px',top:endY+'px',width:endD+'px',height:endD+'px'}
+    ],{duration:600,easing:'cubic-bezier(.35,.8,.3,1)',fill:'forwards'});
+
+    anim.onfinish=function(){
+      show('spark');
+      views.spark.classList.remove('arrived');
+      hideAllThread();
+      sparkGroup.setAttribute('transform','');
+      sparkGroup.style.visibility='visible';
+      document.body.removeChild(fl);
+      // pay out the attachment from the landed spark backward
+      tailReveal.style.strokeDasharray=LT;
+      tailReveal.style.strokeDashoffset=LT;
+      tween(450,function(t){
+        tailReveal.style.strokeDashoffset=LT*(1-easeIO(t));
+      },function(){
+        tailReveal.style.strokeDasharray='';
+        views.spark.classList.add('arrived');
+      });
+    };
+  }
+
+  // ---- bite: the hidden length pays out; spark leads into the thread view
+  function bite(){
+    state.s1='thread';
+    updateIndexRow();
+    views.spark.classList.remove('arrived');
+
+    spark.setAttribute('visibility','hidden');
+    travelGroup.style.visibility='visible';
+    travelSpark.setAttribute('visibility','visible');
+    travelReveal.style.strokeDasharray=LV;
+    travelReveal.style.strokeDashoffset=LV;
+
+    tween(850,function(t){
+      var e=easeIn(t);
+      travelReveal.style.strokeDashoffset=LV*(1-e);
+      var p=travelReveal.getPointAtLength(LV*e);
+      travelSpark.setAttribute('cx',p.x);travelSpark.setAttribute('cy',p.y);
+    },function(){
+      sparkGroup.style.visibility='hidden';
+      travelGroup.style.visibility='hidden';
+      spark.setAttribute('visibility','visible');
+      show('thread');
+      snakeGroup.style.visibility='visible';
+      snakeSpark.setAttribute('visibility','visible');
+      snakeReveal.style.strokeDasharray=LS;
+      snakeReveal.style.strokeDashoffset=LS;
+      tween(950,function(t){
+        var e=easeIO(t);
+        snakeReveal.style.strokeDashoffset=LS*(1-e);
+        var p=snakeReveal.getPointAtLength(LS*e);
+        snakeSpark.setAttribute('cx',p.x);snakeSpark.setAttribute('cy',p.y);
+      },function(){
+        views.thread.classList.add('arrived');
+      });
+    });
+  }
+
+  // ---- revisit a caught record: land settled, no re-enactment
+  function openThreadSettled(){
+    hideAllThread();
+    show('thread');
+    views.thread.classList.remove('arrived');
+    snakeReveal.style.strokeDasharray='';
+    snakeReveal.style.strokeDashoffset='';
+    snakeGroup.style.visibility='visible';
+    snakeGroup.setAttribute('opacity',0);
+    var p=snakeReveal.getPointAtLength(LS);
+    snakeSpark.setAttribute('cx',p.x);snakeSpark.setAttribute('cy',p.y);
+    snakeSpark.setAttribute('visibility','visible');
+    tween(350,function(t){snakeGroup.setAttribute('opacity',t);},function(){
+      views.thread.classList.add('arrived');
+    });
+  }
+
+  function pass(){
+    views.spark.classList.remove('arrived');
+    tween(400,function(t){sparkGroup.setAttribute('opacity',1-t);},function(){
+      sparkGroup.style.visibility='hidden';
+      sparkGroup.setAttribute('opacity',1);
+      show('index');
+    });
+  }
+
+  function backToIndex(){
+    views.thread.classList.remove('arrived');
+    tween(350,function(t){snakeGroup.setAttribute('opacity',1-t);},function(){
+      snakeGroup.style.visibility='hidden';
+      snakeGroup.setAttribute('opacity',1);
+      snakeSpark.setAttribute('visibility','hidden');
+      show('index');
+    });
+  }
+
+  function updateIndexRow(){
+    var mark=$('row1mark'),meta=$('row1meta');
+    if(state.s1==='thread'){
+      mark.className='mark square';
+      meta.textContent='THREAD 01';
+    }else{
+      mark.className='mark dot';
+      meta.textContent='SPARK 01';
+    }
+  }
+
+  $('row1').addEventListener('click',function(){
+    if(state.s1==='thread'){views.index.classList.remove('on');openThreadSettled();}
+    else{arriveFromIndex($('row1mark'));}
+  });
+  $('directBtn').addEventListener('click',function(){
+    if(state.s1==='thread'){openThreadSettled();}
+    else{arriveDirect();}
+  });
+  $('biteBtn').addEventListener('click',bite);
+  $('passBtn').addEventListener('click',pass);
+  $('backBtn').addEventListener('click',backToIndex);
+  $('resetBtn').addEventListener('click',function(){
+    state.s1='spark';updateIndexRow();hideAllThread();show('index');
+  });
+})();
+</script>
+</body>
+</html>

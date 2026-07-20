@@ -85,10 +85,16 @@ def card(node, plate, draw_plate=True):
         y += 46 if fh.size == 34 * SS else 40
 
     fm = font("space-mono-latin-400-normal", 15)
-    label = {"thread": "THREAD", "workbench": "WORKBENCH", "bookshelf": "BOOKSHELF"} \
-        .get(node.get("kind", "thread"), "THREAD")
-    if len(node.get("reads", [])) > 1:
+    # Same rule as schema.mjs: a thread record is a SPARK until it's lit.
+    kind = node.get("kind", "thread")
+    if kind != "thread":
+        label = kind.upper()
+    elif not node.get("lit"):
+        label = "SPARK"
+    elif len(node.get("reads", [])) > 1:
         label = "BROADEN"
+    else:
+        label = "THREAD"
     x = TEXT_X * SS
     for ch in label:
         d.text((x, 522 * SS), ch, font=fm, fill=OCHRE)

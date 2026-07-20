@@ -12,6 +12,16 @@ cd "$(dirname "$0")/.."
 SRC=assets/page-spark.mp4
 [ -f "$SRC" ] || { echo "no $SRC — skipping animated cards"; exit 0; }
 
+# Fail loudly rather than at exit 127. If videoCards is on, og:video will point
+# at files that must exist; skipping quietly would ship 404s to every preview.
+command -v ffmpeg >/dev/null || {
+  echo "ffmpeg not found. It is NOT preinstalled on GitHub runners."
+  echo "Add this before the card step in .github/workflows/pages.yml:"
+  echo "    - run: sudo apt-get update && sudo apt-get install -y ffmpeg"
+  echo "Or set videoCards: false in weaves.config.json to ship static cards only."
+  exit 1
+}
+
 # tight crop around the drawing, scaled to the same box the static card uses
 CROP="crop=672:885:264:158,scale=-1:470"
 

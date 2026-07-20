@@ -1,5 +1,5 @@
 name: Spark (full)
-description: Offer someone a read and a question. Two minutes, three required fields.
+description: Every field. Use Spark for the quick version.
 title: "Thread: "
 labels: ["cq", "thread"]
 body:
@@ -13,7 +13,7 @@ body:
         add the rest afterward and it becomes a broadening on its own.
 
   - type: input
-    id: title
+    id: spark_title
     attributes:
       label: Title
       description: "Required — it's the headline on the text-message preview card and the label in the queue. Short is better. A noun phrase, not a sentence."
@@ -64,7 +64,19 @@ body:
     id: inspiration_kind
     attributes:
       label: Sparked by — what kind
-      options: [reel, video, article, paper, podcast, book, conversation, argument, thought, other]
+      options:
+        [
+          reel,
+          video,
+          article,
+          paper,
+          podcast,
+          book,
+          conversation,
+          argument,
+          thought,
+          other,
+        ]
 
   - type: input
     id: inspiration_url
@@ -104,9 +116,10 @@ body:
     attributes:
       label: Note on the traps
 
-  - type: dropdown
+  - type: input
     id: from
     attributes:
       label: From
-      options: [nick, jeremy]
+      description: nick or jeremy
+      value: nick
     validations: { required: true }

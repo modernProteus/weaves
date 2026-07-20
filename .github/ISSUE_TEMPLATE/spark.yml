@@ -4,7 +4,7 @@ title: "Thread: "
 labels: ["cq", "thread"]
 body:
   - type: input
-    id: title
+    id: spark_title
     attributes:
       label: Title
       placeholder: Identity Fusion
@@ -22,15 +22,17 @@ body:
     attributes:
       label: The question
       description: The line they see under the link in Messages. One sentence.
+      placeholder: Why does making someone feel personally threatened make them more loyal to the group, not less?
     validations: { required: true }
 
-  - type: dropdown
+  - type: input
     id: from
     attributes:
       label: From
-      options: [nick, jeremy]
+      description: nick or jeremy
+      value: nick
     validations: { required: true }
 
   - type: markdown
     attributes:
-      value: "Everything else can be added later, or use **Spark (full)**."
+      value: "Everything else — why, trap terms, what sparked it, source line — can be added later by editing the JSON, or use the **Spark (full)** template instead."

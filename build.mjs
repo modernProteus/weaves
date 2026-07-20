@@ -404,7 +404,7 @@ writeFileSync(join(out, "new", "index.html"), fill(shell, {
 
       <label class="label" for="c-from">From</label>
       <select id="c-from">${Object.keys(cfg.people || { nick: 1 })
-        .map(k => `<option value="${k}">${esc(who(k))}</option>`).join("")}</select>
+        .map((k, i) => `<option value="${k}"${i ? "" : " selected"}>${esc(who(k))}</option>`).join("")}</select>
 
       <button class="reply warm" id="c-go" type="button">Open in GitHub &#8594;</button>
       <p class="said" id="c-note" role="status"></p>
@@ -421,7 +421,7 @@ writeFileSync(join(out, "new", "index.html"), fill(shell, {
     if (!t || !u || !h) { note.textContent = "title, link and question, please"; return; }
     var q = "template=spark.yml"
       + "&title=" + encodeURIComponent("Spark: " + t)
-      + "&read_url=" + encodeURIComponent(u)
+      + "&spark_title=" + encodeURIComponent(t)\n      + "&read_url=" + encodeURIComponent(u)
       + "&hook=" + encodeURIComponent(h)
       + "&from=" + encodeURIComponent(v("c-from"));
     window.location.href = "https://github.com/" + repo + "/issues/new?" + q;

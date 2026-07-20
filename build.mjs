@@ -402,6 +402,9 @@ writeFileSync(join(out, "new", "index.html"), fill(shell, {
       <label class="label" for="c-hook">The question</label>
       <textarea id="c-hook" rows="3" placeholder="The line they see under the link in Messages."></textarea>
 
+      <label class="label" for="c-why">Why this <span class="opt">optional</span></label>
+      <textarea id="c-why" rows="2" placeholder="A sentence of context, shown under the title."></textarea>
+
       <label class="label" for="c-from">From</label>
       <select id="c-from">${Object.keys(cfg.people || { nick: 1 })
         .map((k, i) => `<option value="${k}"${i ? "" : " selected"}>${esc(who(k))}</option>`).join("")}</select>
@@ -422,7 +425,7 @@ writeFileSync(join(out, "new", "index.html"), fill(shell, {
     var q = "template=spark.yml"
       + "&title=" + encodeURIComponent("Spark: " + t)
       + "&spark_title=" + encodeURIComponent(t)\n      + "&read_url=" + encodeURIComponent(u)
-      + "&hook=" + encodeURIComponent(h)
+      + "&hook=" + encodeURIComponent(h)\n      + (v("c-why") ? "&why=" + encodeURIComponent(v("c-why")) : "")
       + "&from=" + encodeURIComponent(v("c-from"));
     window.location.href = "https://github.com/" + repo + "/issues/new?" + q;
   });

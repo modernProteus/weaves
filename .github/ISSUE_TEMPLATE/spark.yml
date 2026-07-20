@@ -25,6 +25,12 @@ body:
       placeholder: Why does making someone feel personally threatened make them more loyal to the group, not less?
     validations: { required: true }
 
+  - type: textarea
+    id: why
+    attributes:
+      label: Why this
+      description: Optional. A sentence or two of context, shown under the title.
+
   - type: input
     id: from
     attributes:

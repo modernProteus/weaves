@@ -283,9 +283,10 @@ if (hasShared) cpSync(sharedCard, join(out, "card.png"));
 const perNode = existsSync(join(root, "assets", "plate.png"));
 
 // page animation: plays once beside the question, holds on its final frame
-const animSrc = join(root, "assets", "page-spark.mp4");
+const animSrc = ["page-spark.mp4", "spark.mp4"]
+  .map(f => join(root, "assets", f)).find(existsSync) || "";
 const posterSrc = join(root, "assets", "spark-poster.png");
-const hasAnim = existsSync(animSrc);
+const hasAnim = !!animSrc;
 if (hasAnim) {
   cpSync(animSrc, join(out, "page-spark.mp4"));
   if (existsSync(posterSrc)) cpSync(posterSrc, join(out, "spark-poster.png"));
@@ -315,33 +316,39 @@ function ogImage(id) {
   ].join("\n");
 }
 
-// Experiment: iMessage documents og:video with MP4 as the path to motion,
-// since GIFs render as a first frame only. Support is inconsistent, so og:image
-// stays as the fallback and every client that ignores this still gets a card.
-const videoPath = join(root, "assets", "spark.mp4");
-const hasVideo = existsSync(videoPath);
-if (hasVideo) cpSync(videoPath, join(out, "spark.mp4"));
+// og:video. A shared clip contradicts a per-node card: every preview would show
+// the same motion under different text. So it is only used when there are no
+// per-node cards. With videoCards enabled, each node points at its own instead.
+const videoCards = !!cfg.videoCards;
+const sharedVideo = join(root, "assets", "spark.mp4");
+const useShared = !perNode && existsSync(sharedVideo);
+if (useShared) cpSync(sharedVideo, join(out, "spark.mp4"));
 
-let OG_VIDEO = "";
-if (hasVideo) {
-  const vw = cfg.video?.width ?? 1200;
-  const vh = cfg.video?.height ?? 1200;
-  OG_VIDEO = "\n" + [
-    `<meta property="og:video" content="${BASE}/spark.mp4">`,
-    `<meta property="og:video:secure_url" content="${BASE}/spark.mp4">`,
+function ogVideo(id) {
+  let url;
+  if (perNode && videoCards && id) url = `${BASE}/n/${id}/card.mp4`;
+  else if (useShared)              url = `${BASE}/spark.mp4`;
+  else return "";
+  const vw = cfg.video?.width ?? (perNode ? 1200 : 1200);
+  const vh = cfg.video?.height ?? (perNode ? 630 : 1200);
+  return "\n" + [
+    `<meta property="og:video" content="${url}">`,
+    `<meta property="og:video:secure_url" content="${url}">`,
     `<meta property="og:video:type" content="video/mp4">`,
     `<meta property="og:video:width" content="${vw}">`,
     `<meta property="og:video:height" content="${vh}">`
   ].join("\n");
-  console.log(`spark.mp4 present -> og:video ${vw}x${vh}`);
 }
+
+if (perNode && !videoCards && existsSync(sharedVideo))
+  console.log("note: assets/spark.mp4 ignored for previews (per-node cards are on)");
 
 const shell = T("page.html");
 
 for (const n of nodes) {
   mkdirSync(join(out, "n", n.id), { recursive: true });
   writeFileSync(join(out, "n", n.id, "index.html"), fill(shell, {
-    BASE, OG_IMAGE: ogImage(n.id), OG_VIDEO, URL: `${BASE}/n/${n.id}/`,
+    BASE, OG_IMAGE: ogImage(n.id), OG_VIDEO: ogVideo(n.id), URL: `${BASE}/n/${n.id}/`,
     TITLE_ATTR: attr(n.title),
     DESC_ATTR: attr(n.hook || n.action || n.question || n.why || ""),
     KIND_LABEL: attr(MODES[modeOf(n)].label),
@@ -351,7 +358,7 @@ for (const n of nodes) {
 }
 
 writeFileSync(join(out, "index.html"), fill(shell, {
-  BASE, OG_IMAGE: ogImage(null), OG_VIDEO, URL: `${BASE}/`,
+  BASE, OG_IMAGE: ogImage(null), OG_VIDEO: ogVideo(null), URL: `${BASE}/`,
   TITLE_ATTR: "Sparks",
   DESC_ATTR: attr(`${openRoots} open. Nothing owed.`),
   KIND_LABEL: "Weaves",

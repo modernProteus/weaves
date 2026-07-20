@@ -75,6 +75,28 @@ const childrenOf = id => nodes.filter(n => n.parent === id)
 
 const KC = { thread: "k-thread", workbench: "k-workbench", bookshelf: "k-bookshelf" };
 
+// What kind of thing is on the other end of this link. Cheap, honest, and it
+// tells you at a glance whether you're being asked for 40 seconds or 40 minutes.
+function linkType(url = "") {
+  let h = "";
+  try { h = new URL(url).hostname.replace(/^www\./, ""); } catch { return ["link", ""]; }
+  const is = re => re.test(h);
+  const t =
+    is(/instagram\.com/)                              ? "reel"
+  : is(/tiktok\.com/)                                 ? "clip"
+  : is(/(youtube\.com|youtu\.be|vimeo\.com)/)         ? "video"
+  : is(/(podcasts\.apple|spotify|overcast|pocketcasts)/) ? "podcast"
+  : /\.pdf($|\?)/i.test(url)                          ? "pdf"
+  : is(/(arxiv|jstor|sagepub|springer|nature\.com|sciencedirect|pnas|doi\.org|psycnet|ncbi|\.edu$)/) ? "paper"
+  : is(/(substack|medium\.com)/)                      ? "essay"
+  : is(/(nytimes|washingtonpost|theguardian|bbc\.|reuters|apnews|wsj\.|npr\.|atlantic|newyorker|economist|ft\.com)/) ? "news"
+  : is(/(github|gitlab)\.com/)                        ? "code"
+  : is(/(wikipedia|britannica)/)                      ? "reference"
+  : is(/(x\.com|twitter\.com|bsky)/)                  ? "post"
+  : "link";
+  return [t, h];
+}
+
 // Lineage spine: one mark per ancestor, current one filled.
 function spine(node, { mini = false } = {}) {
   const chain = lineage(node, byId);
@@ -91,15 +113,20 @@ function spine(node, { mini = false } = {}) {
     (v ? ` · ${v} volley${v === 1 ? "" : "s"}` : "") + `</span></div>`;
 }
 
-const readBlock = r => `<a class="read" href="${attr(r.url || "#")}" target="_blank" rel="noopener">
+const readBlock = r => {
+  const [t, host] = linkType(r.url);
+  return `<a class="read t-${t}" href="${attr(r.url || "#")}" target="_blank" rel="noopener">
   <span class="read-title">${esc(r.title || "Untitled")}</span>
   <span class="read-meta">
+    <span class="ltype">${esc(t)}</span>
     ${r.source ? `<span>${esc(r.source)}</span><span>·</span>` : ""}
     <span>${esc(r.time || "")}</span>
+    ${host ? `<span class="host">${esc(host)}</span>` : ""}
     <span class="arrow" aria-hidden="true">&#8594;</span>
   </span>
   ${r.note ? `<span class="read-note">${esc(r.note)}</span>` : ""}
 </a>`;
+};
 
 function inspirationBlock(n) {
   const i = n.inspiration;
@@ -140,11 +167,18 @@ function body(n) {
 
   P.push(`<div class="titleblock"><h1>${esc(n.title)}</h1>${n.why ? `<p class="why">${esc(n.why)}</p>` : ""}</div>`);
 
-  if (n.reads.length) {
+  // A spark offers ONE read, always. Later reads exist in the record but stay
+  // out of the spark view; lighting it is what reveals the slate. So unlighting
+  // is lossless — nothing is deleted, it just goes back behind the curtain.
+  const shown = mode === "spark" ? n.reads.slice(0, 1) : n.reads;
+  const held  = n.reads.length - shown.length;
+
+  if (shown.length) {
     P.push(`<hr class="rule">`);
     P.push(`<p class="label">${mode === "broaden" ? `The slate · ${n.reads.length} reads` : "The read"}</p>`);
-    if (n.slateNote) P.push(`<p class="slate-note">${esc(n.slateNote)}</p>`);
-    P.push(n.reads.map(readBlock).join(""));
+    if (mode !== "spark" && n.slateNote) P.push(`<p class="slate-note">${esc(n.slateNote)}</p>`);
+    P.push(shown.map(readBlock).join(""));
+    if (held) P.push(`<p class="held">${held} more read${held === 1 ? "" : "s"} once it's lit.</p>`);
     P.push(inspirationBlock(n));
   }
 
@@ -178,17 +212,23 @@ function body(n) {
   const x = exchangeBlock(n); if (x) P.push(`<hr class="rule">${x}`);
   const c = childrenBlock(n); if (c) P.push(`<hr class="rule">${c}`);
 
-  if (isThread) P.push(`<hr class="rule"><p class="label">No reply needed</p>
+  if (isThread && !n.lit) P.push(`<hr class="rule"><p class="label">No reply needed</p>
     <div class="replies" id="replies" data-title="${attr(n.title)}" data-reply-to="${attr(contactOf(n.from))}">
-      <a class="reply warm" data-msg="bite">Bite</a>
+      <a class="reply warm" data-msg="spark it">Spark it</a>
       <a class="reply" data-msg="park it">Park it</a>
       <a class="reply" data-msg="pass">Pass</a>
     </div>
     <p class="said" id="said" role="status"></p>`);
 
+  if (isThread && n.lit && n.issue)
+    P.push(`<hr class="rule"><p class="label">The thread</p>
+      <a class="joinlink" href="https://github.com/${cfg.repo}/issues/${n.issue}" target="_blank" rel="noopener">
+        Add a note or a read &#8594;</a>
+      <p class="joinnote">Comments live on the issue. Post a bare URL and it becomes a read.</p>`);
+
   P.push(`<footer>
-    <a class="backlink" href="${BASE}/">&#8592; All threads</a>
-    <span>${esc(KINDS[n.kind].label)} &middot; ${esc(who(n.from))} &middot; ${esc(n.created)}${isThread ? " &middot; nothing owed" : ""}</span>
+    <a class="backlink" href="${BASE}/">&#8592; All sparks</a>
+    <span>${esc(MODES[modeOf(n)].label)} &middot; ${esc(who(n.from))} &middot; ${esc(n.created)}${isThread ? " &middot; nothing owed" : ""}</span>
   </footer>`);
 
   return P.join("\n");
@@ -304,7 +344,7 @@ for (const n of nodes) {
     BASE, OG_IMAGE: ogImage(n.id), OG_VIDEO, URL: `${BASE}/n/${n.id}/`,
     TITLE_ATTR: attr(n.title),
     DESC_ATTR: attr(n.hook || n.action || n.question || n.why || ""),
-    KIND_LABEL: attr(KINDS[n.kind].label),
+    KIND_LABEL: attr(MODES[modeOf(n)].label),
     CLASS: "",
     BODY: body(n)
   }));
@@ -312,18 +352,18 @@ for (const n of nodes) {
 
 writeFileSync(join(out, "index.html"), fill(shell, {
   BASE, OG_IMAGE: ogImage(null), OG_VIDEO, URL: `${BASE}/`,
-  TITLE_ATTR: "Threads",
+  TITLE_ATTR: "Sparks",
   DESC_ATTR: attr(`${openRoots} open. Nothing owed.`),
   KIND_LABEL: "Weaves",
   CLASS: " wide",
   BODY: `<div class="masthead">
-      <h1>Threads</h1>
+      <h1>Sparks</h1>
       <span class="count">${openRoots} open · ${nodes.length} nodes</span>
     </div>
     <p class="sub">Every inquiry enters the same way: one read, one question. What happens after is emergent.</p>
-    <a class="new" href="https://github.com/${cfg.repo}/issues/new?template=thread.yml">+ New thread</a>
+    <a class="new" href="${BASE}/new/">+ New spark</a>
     <div class="legend">
-      <span><i class="mark k-thread here"></i>thread</span>
+      <span><i class="mark k-thread here"></i>spark</span>
       <span><i class="mark k-workbench here"></i>workbench · building</span>
       <span><i class="mark k-bookshelf here"></i>bookshelf · held open</span>
     </div>
@@ -331,6 +371,56 @@ writeFileSync(join(out, "index.html"), fill(shell, {
       : `<p class="empty">Nothing queued. That's a fine state to be in.</p>`}
     <footer><span>Cap 5 open &middot; stale after ${cfg.staleAfterDays ?? 90} days &middot; built ${new Date().toISOString().slice(0, 10)}</span></footer>`
 }));
+
+mkdirSync(join(out, "new"), { recursive: true });
+writeFileSync(join(out, "new", "index.html"), fill(shell, {
+  BASE, URL: `${BASE}/new/`,
+  TITLE_ATTR: "New spark",
+  DESC_ATTR: "Four fields.",
+  KIND_LABEL: "Weaves",
+  OG_IMAGE: `<meta name="twitter:card" content="summary">`,
+  OG_VIDEO: "",
+  CLASS: "",
+  BODY: `
+    <div class="titleblock"><h1>New spark</h1>
+      <p class="why">Four fields. Everything else can wait.</p></div>
+    <hr class="rule">
+    <form id="composer" onsubmit="return false">
+      <label class="label" for="c-title">Title</label>
+      <input id="c-title" type="text" placeholder="Identity Fusion" autocomplete="off">
+
+      <label class="label" for="c-url">Link</label>
+      <input id="c-url" type="url" placeholder="https://" inputmode="url" autocomplete="off">
+
+      <label class="label" for="c-hook">The question</label>
+      <textarea id="c-hook" rows="3" placeholder="The line they see under the link in Messages."></textarea>
+
+      <label class="label" for="c-from">From</label>
+      <select id="c-from">${Object.keys(cfg.people || { nick: 1 })
+        .map(k => `<option value="${k}">${esc(who(k))}</option>`).join("")}</select>
+
+      <button class="reply warm" id="c-go" type="button">Open in GitHub &#8594;</button>
+      <p class="said" id="c-note" role="status"></p>
+    </form>
+    <p class="joinnote">This fills in the issue form and hands it to GitHub. You still tap Submit there.</p>
+    <footer><a class="backlink" href="${BASE}/">&#8592; All sparks</a><span>Weaves</span></footer>`
+}).replace("</body>", `<script>
+(function(){
+  var repo = ${JSON.stringify(cfg.repo)};
+  var go = document.getElementById("c-go"), note = document.getElementById("c-note");
+  var v = id => document.getElementById(id).value.trim();
+  go.addEventListener("click", function(){
+    var t = v("c-title"), u = v("c-url"), h = v("c-hook");
+    if (!t || !u || !h) { note.textContent = "title, link and question, please"; return; }
+    var q = "template=spark.yml"
+      + "&title=" + encodeURIComponent("Spark: " + t)
+      + "&read_url=" + encodeURIComponent(u)
+      + "&hook=" + encodeURIComponent(h)
+      + "&from=" + encodeURIComponent(v("c-from"));
+    window.location.href = "https://github.com/" + repo + "/issues/new?" + q;
+  });
+})();
+</script></body>`));
 
 console.log(`built ${nodes.length} node(s), ${roots.length} root(s)${drafts ? `, ${drafts} draft held back` : ""} -> dist/`);
 for (const n of nodes) console.log(`  ${modeOf(n).padEnd(8)} ${BASE}/n/${n.id}/`);

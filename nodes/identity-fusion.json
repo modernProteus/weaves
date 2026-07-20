@@ -6,27 +6,39 @@
   "from": "nick",
   "created": "2026-07-19",
   "status": "open",
-
-  "why": "There's a name for the thing where someone takes an argument about policy as an attack on their person. It's a measurable construct with 15 years of field data behind it, and the finding that matters runs opposite to intuition.",
-
-  "hook": "Why does making someone feel personally threatened make them more loyal to the group, not less?",
-
+  "why": "There's a name for the thing where an argument about policy lands as an attack on a person. It's a measurable construct with fifteen years of field data behind it, and the finding that matters runs opposite to intuition.",
+  "hook": "Some people distance themselves when their side loses. Others double down. What's the difference between them?",
   "inspiration": {
     "kind": "reel",
-    "what": "An IG reel on political identity that sent me looking for the actual research",
+    "what": "A reel on political identity that sent me looking for the actual research",
     "url": "https://www.instagram.com/reel/DXeHWiWsN6l/"
   },
-
   "reads": [
     {
       "title": "Identity Fusion",
-      "source": "Swann & Buhrmester, 2015 · pp. 52–54",
+      "source": "Swann & Buhrmester, 2015 \u00b7 pp. 52\u201354",
       "time": "~8 min",
       "url": "https://labs.la.utexas.edu/swann/files/2016/03/52-57.pdf"
+    },
+    {
+      "title": "The fusion-secure base hypothesis",
+      "source": "Klein & Bastian, Pers Soc Psychol Rev",
+      "time": "~25 min",
+      "url": "https://journals.sagepub.com/doi/10.1177/10888683221100883",
+      "note": "Jeremy pushed back on the first one, so this is the counterweight."
     }
   ],
-
   "flagNote": "Words that import the verdict into the premise. Cheaper to name now than to untangle later.",
-
-  "chips": ["extremism", "radicalized", "cult", "brainwashed", "tribalism"]
+  "chips": [
+    "extremism",
+    "radicalized",
+    "cult",
+    "brainwashed",
+    "tribalism"
+  ],
+  "exchange": [],
+  "log": [],
+  "slateNote": "These pull against each other on purpose. The first says fusion drives extreme sacrifice for the group. The second says fused people are more willing to trust benign outsiders, and that threat, not fusion, is the switch.",
+  "lit": true,
+  "issue": 1
 }

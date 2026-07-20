@@ -1,0 +1,28 @@
+{
+  "id": "secure-base",
+  "kind": "thread",
+  "parent": null,
+  "title": "The Secure Base Hypothesis",
+  "from": "jeremy",
+  "created": "2026-07-20",
+  "status": "open",
+  "why": "The counterweight to the alarmist read. If fusion behaves like an attachment structure rather than a pathology, then the thing to change isn't the loyalty.",
+  "hook": "If deeply loyal people trust outsiders more, not less, is the loyalty ever actually the problem?",
+  "reads": [
+    {
+      "title": "The fusion-secure base hypothesis",
+      "source": "Klein & Bastian, Pers Soc Psychol Rev",
+      "time": "~25 min",
+      "url": "https://journals.sagepub.com/doi/10.1177/10888683221100883"
+    }
+  ],
+  "flagNote": "Each of these quietly decides whose commitments count as legitimate.",
+  "chips": [
+    "healthy",
+    "unhealthy",
+    "pathology",
+    "irrational"
+  ],
+  "exchange": [],
+  "log": []
+}

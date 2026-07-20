@@ -215,3 +215,50 @@ footer a:hover{color:var(--linen)}
 
 .stale{color:var(--madder)}
 .empty{color:var(--linen-dim);font-size:.95rem;border:1px dashed var(--thread-lit);padding:18px 20px;margin-top:26px}
+
+
+/* ── link type badges ─────────────────────────────────────── */
+.ltype{
+  font-family:"Space Mono",monospace;font-size:9.5px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ochre);
+  border:1px solid rgba(184,146,48,.45);padding:2px 7px;
+}
+.host{opacity:.62}
+.read.t-reel,.read.t-clip,.read.t-video{border-left-color:var(--madder)}
+.read.t-reel .ltype,.read.t-clip .ltype,.read.t-video .ltype{
+  color:var(--madder);border-color:rgba(190,68,56,.5);
+}
+.read.t-paper,.read.t-pdf{border-left-color:var(--linen)}
+.read.t-paper .ltype,.read.t-pdf .ltype{color:var(--linen);border-color:var(--thread-lit)}
+
+/* ── lit thread: the conversation ─────────────────────────── */
+.joinlink{
+  display:inline-block;font-family:"Space Mono",monospace;font-size:12px;
+  letter-spacing:.06em;text-transform:uppercase;text-decoration:none;
+  color:var(--linen);border:1px solid var(--thread-lit);padding:11px 17px;
+  transition:background .16s,border-color .16s,color .16s;
+}
+.joinlink:hover,.joinlink:focus-visible{background:var(--madder);border-color:var(--madder)}
+.joinnote{color:var(--linen-dim);font-size:.88rem;margin:12px 0 0;max-width:46ch}
+
+/* ── composer ─────────────────────────────────────────────── */
+#composer{display:block;margin-top:4px}
+#composer .label{display:block}
+#composer input,#composer textarea,#composer select{
+  width:100%;background:var(--vat-raised);color:var(--linen);
+  border:1px solid var(--thread);border-left:3px solid var(--ochre);
+  padding:13px 15px;font-family:"Karla",sans-serif;font-size:1rem;
+  border-radius:0;-webkit-appearance:none;appearance:none;
+}
+#composer textarea{resize:vertical;line-height:1.5}
+#composer input:focus,#composer textarea:focus,#composer select:focus{
+  outline:none;border-color:var(--thread-lit);border-left-color:var(--madder);
+}
+#composer select{background-image:none}
+#c-go{margin-top:26px;cursor:pointer;font-family:"Space Mono",monospace;
+  font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+  background:transparent;color:var(--linen);border:1px solid var(--thread-lit);padding:13px 20px;width:auto}
+#c-go:hover{background:var(--madder);border-color:var(--madder)}
+
+.held{font-family:"Space Mono",monospace;font-size:10.5px;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--linen-dim);margin:11px 0 0}

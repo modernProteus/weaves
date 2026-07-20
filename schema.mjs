@@ -4,7 +4,7 @@
 export const KINDS = {
 
   thread: {
-    label: "Thread",
+    label: "Spark",
     blurb: "An offer. One read, one question. Nothing owed.",
     requires: [
       { field: "title", why: "It's the headline on the preview card and the label in the queue." },
@@ -34,11 +34,17 @@ export const KINDS = {
 };
 
 // Mode is derived, never stored. One read is an offer; several in tension is a broadening.
+// A record enters as a SPARK. Once someone bites it is lit, and the same record
+// is a THREAD: more reads, a place to talk. Spark and Thread are two views of
+// one thing, and `lit` is the switch.
 export const modeOf = n =>
-  n.kind === "thread" ? (n.reads?.length > 1 ? "broaden" : "thread") : n.kind;
+  n.kind !== "thread" ? n.kind
+    : n.lit ? (n.reads?.length > 1 ? "broaden" : "thread")
+    : "spark";
 
 export const MODES = {
-  thread:  { label: "Thread",  hint: "one strand offered" },
+  spark:   { label: "Spark",   hint: "offered, nothing owed" },
+  thread:  { label: "Thread",  hint: "lit, pulling on it" },
   broaden: { label: "Broaden", hint: "strands pooled, pulling against each other" },
   workbench:   { label: "Workbench",   hint: "building" },
   bookshelf:   { label: "Bookshelf",   hint: "held under tension" }
@@ -66,7 +72,7 @@ export function validate(node, byId) {
     errs.push(`parent "${node.parent}" doesn't exist.`);
 
   // broaden wants tension, not just volume
-  if (modeOf(node) === "broaden" && !node.slateNote)
+  if (node.lit && node.reads?.length > 1 && !node.slateNote)
     errs.push(`missing "slateNote" — with more than one read this is a broadening, and the point is that the reads pull against each other. Say what the tension is. If they all agree, you have a longer thread, not a broadening.`);
 
   return errs;

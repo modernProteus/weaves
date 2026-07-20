@@ -1,6 +1,6 @@
 {
   "id": "identity-fusion",
-  "kind": "thread",
+  "kind": "spark",
   "parent": null,
   "title": "Identity Fusion",
   "from": "nick",
@@ -29,13 +29,7 @@
     }
   ],
   "flagNote": "Words that import the verdict into the premise. Cheaper to name now than to untangle later.",
-  "chips": [
-    "extremism",
-    "radicalized",
-    "cult",
-    "brainwashed",
-    "tribalism"
-  ],
+  "chips": ["extremism", "radicalized", "cult", "brainwashed", "tribalism"],
   "exchange": [],
   "log": [],
   "slateNote": "These pull against each other on purpose. The first says fusion drives extreme sacrifice for the group. The second says fused people are more willing to trust benign outsiders, and that threat, not fusion, is the switch.",

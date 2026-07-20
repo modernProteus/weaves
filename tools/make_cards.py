@@ -101,6 +101,15 @@ def main():
     if not os.path.exists(plate_path):
         print("no assets/plate.png — skipping card generation")
         return
+
+    missing = [f for f in ("fraunces-latin-600-normal", "fraunces-latin-400-italic",
+                           "space-mono-latin-400-normal")
+               if not os.path.exists(os.path.join(TTF, f + ".ttf"))]
+    if missing:
+        sys.exit("missing fonts in tools/ttf/: " + ", ".join(missing))
+
+    if not os.path.isdir(os.path.join(ROOT, "dist")):
+        sys.exit("no dist/ — run `node build.mjs` first, it wipes dist/ before writing")
     plate = Image.open(plate_path).convert("RGBA")
 
     made = 0

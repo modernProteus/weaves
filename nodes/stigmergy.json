@@ -1,0 +1,23 @@
+{
+  "id": "stigmergy",
+  "kind": "thread",
+  "parent": null,
+  "title": "Stigmergy",
+  "from": "nick",
+  "created": "2026-07-20",
+  "status": "open",
+  "why": "",
+  "chips": [],
+  "flagNote": "",
+  "reads": [
+    {
+      "title": "Stigmergy",
+      "source": "",
+      "time": "~10 min",
+      "url": "https://en.wikipedia.org/wiki/Stigmergy"
+    }
+  ],
+  "exchange": [],
+  "log": [],
+  "hook": "How do termites build an arch with no blueprint, no foreman, and no idea what the other termites are doing?"
+}

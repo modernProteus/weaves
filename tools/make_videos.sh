@@ -23,14 +23,14 @@ command -v ffmpeg >/dev/null || {
 }
 
 # tight crop around the drawing, scaled to the same box the static card uses
-CROP="crop=672:885:264:158,scale=-1:470"
+CROP="crop=672:885:264:158,scale=-1:380"
 
 n=0
 for base in dist/n/*/_base.png; do
   [ -e "$base" ] || continue
   dir=$(dirname "$base")
   ffmpeg -v error -loop 1 -i "$base" -i "$SRC" \
-    -filter_complex "[1:v]${CROP}[a];[0:v][a]overlay=44:80:shortest=1,format=yuv420p" \
+    -filter_complex "[1:v]${CROP}[a];[0:v][a]overlay=44:125:shortest=1,format=yuv420p" \
     -c:v libx264 -profile:v baseline -level 3.1 -an -movflags +faststart \
     -crf 28 -shortest "$dir/card.mp4" -y
   rm -f "$base"

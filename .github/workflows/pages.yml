@@ -32,12 +32,14 @@ jobs:
       # per-node preview cards: title and question composited onto the drawing.
       # runs after build.mjs, which wipes dist/ before writing.
       - name: Preview cards
+        env:
+          CQ_VIDEO_CARDS: "1"
         run: |
           python -m pip install --upgrade pip
           python -m pip install pillow
           python tools/make_cards.py
-          echo "--- generated ---"
-          find dist -name card.png -print
+          bash tools/make_videos.sh
+          find dist -name 'card.*' -print
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

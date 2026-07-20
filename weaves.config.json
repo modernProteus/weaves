@@ -15,6 +15,6 @@
     }
   },
   "_people_note": "contact = phone or email. Reply buttons go to whoever authored the node, so each person fills in their own.",
-  "videoCards": false,
+  "videoCards": true,
   "_videoCards_note": "true only if the workflow runs tools/make_videos.sh; each node then gets its own animated card.mp4"
 }

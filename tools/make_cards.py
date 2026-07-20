@@ -46,18 +46,19 @@ def wrap(draw, text, f, width):
     return lines
 
 
-def card(node, plate):
+def card(node, plate, draw_plate=True):
     img = Image.new("RGB", (W * SS, H * SS), VAT)
     d = ImageDraw.Draw(img)
 
     for x in range(0, W, 48):
         d.line([(x * SS, 0), (x * SS, H * SS)], fill=WARP, width=1 * SS)
 
-    # the drawing, left, bled slightly off the bottom so it frames rather than sits
-    p = plate.copy()
-    scale = (PLATE_H * SS) / p.height
-    p = p.resize((int(p.width * scale), int(p.height * scale)), Image.LANCZOS)
-    img.paste(p, (44 * SS, int((H * SS - p.height) / 2)), p)
+    # the drawing, left. omitted for the video base, where the animation goes here.
+    if draw_plate:
+        p = plate.copy()
+        scale = (PLATE_H * SS) / p.height
+        p = p.resize((int(p.width * scale), int(p.height * scale)), Image.LANCZOS)
+        img.paste(p, (44 * SS, int((H * SS - p.height) / 2)), p)
 
     y = 200
 
@@ -121,6 +122,9 @@ def main():
         out = os.path.join(ROOT, "dist", "n", nid)
         os.makedirs(out, exist_ok=True)
         card(node, plate).save(os.path.join(out, "card.png"), optimize=True)
+        # base plate for the animated card: same layout, drawing left out
+        if os.environ.get("CQ_VIDEO_CARDS"):
+            card(node, plate, draw_plate=False).save(os.path.join(out, "_base.png"))
         made += 1
         print(f"  card: {nid}")
     print(f"generated {made} card(s)")

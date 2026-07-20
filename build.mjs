@@ -148,7 +148,18 @@ function body(n) {
     P.push(inspirationBlock(n));
   }
 
-  if (n.hook) P.push(`<p class="label">The question</p><p class="hook">${esc(n.hook)}</p>`);
+  if (n.hook) {
+    P.push(`<p class="label">The question</p>`);
+    P.push(hasAnim
+      ? `<div class="stage">
+          <video class="anim" autoplay muted playsinline preload="metadata"
+                 poster="${BASE}/spark-poster.png" aria-hidden="true" tabindex="-1">
+            <source src="${BASE}/page-spark.mp4" type="video/mp4">
+          </video>
+          <p class="hook">${esc(n.hook)}</p>
+        </div>`
+      : `<p class="hook">${esc(n.hook)}</p>`);
+  }
 
   if (n.kind === "workbench")
     P.push(`<hr class="rule"><p class="label">The action</p><p class="hook">${esc(n.action)}</p>`);
@@ -230,6 +241,15 @@ if (hasShared) cpSync(sharedCard, join(out, "card.png"));
 
 // the python step runs after this script, so we key off its input, not its output
 const perNode = existsSync(join(root, "assets", "plate.png"));
+
+// page animation: plays once beside the question, holds on its final frame
+const animSrc = join(root, "assets", "page-spark.mp4");
+const posterSrc = join(root, "assets", "spark-poster.png");
+const hasAnim = existsSync(animSrc);
+if (hasAnim) {
+  cpSync(animSrc, join(out, "page-spark.mp4"));
+  if (existsSync(posterSrc)) cpSync(posterSrc, join(out, "spark-poster.png"));
+}
 if (perNode) console.log("per-node cards enabled (assets/plate.png present)");
 
 function pngSize(f) {

@@ -31,3 +31,17 @@ if (box) {
     }
   });
 }
+
+
+// The spark animation plays once and stays on its final frame. Anyone who has
+// asked their system to reduce motion gets the poster and nothing moving.
+const anim = document.querySelector(".anim");
+if (anim) {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    anim.removeAttribute("autoplay");
+    anim.pause();
+  } else {
+    // start from the top even if the browser restored a cached position
+    anim.addEventListener("loadeddata", () => { anim.currentTime = 0; }, { once: true });
+  }
+}

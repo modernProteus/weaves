@@ -1,0 +1,36 @@
+name: Spark
+description: Four fields. Fire and forget.
+title: "Thread: "
+labels: ["cq", "thread"]
+body:
+  - type: input
+    id: title
+    attributes:
+      label: Title
+      placeholder: Identity Fusion
+    validations: { required: true }
+
+  - type: input
+    id: read_url
+    attributes:
+      label: Link
+      placeholder: https://
+    validations: { required: true }
+
+  - type: textarea
+    id: hook
+    attributes:
+      label: The question
+      description: The line they see under the link in Messages. One sentence.
+    validations: { required: true }
+
+  - type: dropdown
+    id: from
+    attributes:
+      label: From
+      options: [nick, jeremy]
+    validations: { required: true }
+
+  - type: markdown
+    attributes:
+      value: "Everything else can be added later, or use **Spark (full)**."

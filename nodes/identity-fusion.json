@@ -1,6 +1,6 @@
 {
   "id": "identity-fusion",
-  "kind": "spark",
+  "kind": "thread",
   "parent": null,
   "title": "Identity Fusion",
   "from": "nick",

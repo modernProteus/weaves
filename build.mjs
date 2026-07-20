@@ -218,33 +218,41 @@ const out = join(root, "dist");
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
 for (const f of ["cq.css", "cq.js"]) cpSync(join(root, "templates", f), join(out, f));
-// Only claim an image if one actually exists. A 404 og:image degrades the card
-// in some clients; omitting it gives a clean text preview instead.
-//
-// Shape decides the layout the client renders. A square reads as a compact card
-// (icon left, title and question right, text as the focus). A wide one forces the
-// big banner-on-top form. Read it from the PNG header rather than hardcoding.
-const cardPath = join(root, "assets", "card.png");
-const hasCard = existsSync(cardPath);
-if (hasCard) cpSync(cardPath, join(out, "card.png"));
+// Preview images, in order of preference:
+//   1. per-node cards written by tools/make_cards.py (title + question baked in)
+//   2. a single shared assets/card.png
+//   3. none at all
+// A 404 og:image degrades the card in some clients, so we only ever claim one
+// that exists. Shape decides layout: wide gives the banner, square the compact card.
+const sharedCard = join(root, "assets", "card.png");
+const hasShared = existsSync(sharedCard);
+if (hasShared) cpSync(sharedCard, join(out, "card.png"));
 
-function pngSize(p) {
-  const b = readFileSync(p);
+// the python step runs after this script, so we key off its input, not its output
+const perNode = existsSync(join(root, "assets", "plate.png"));
+if (perNode) console.log("per-node cards enabled (assets/plate.png present)");
+
+function pngSize(f) {
+  const b = readFileSync(f);
   return { w: b.readUInt32BE(16), h: b.readUInt32BE(20) };
 }
 
-let OG_IMAGE = `<meta name="twitter:card" content="summary">`;
-if (hasCard) {
-  const { w, h } = pngSize(cardPath);
-  const wide = w / h > 1.4;
-  OG_IMAGE = [
-    `<meta property="og:image" content="${BASE}/card.png">`,
-    `<meta property="og:image:width" content="${w}">`,
-    `<meta property="og:image:height" content="${h}">`,
-    `<meta property="og:image:alt" content="A single thread coiling inward around a question">`,
-    `<meta name="twitter:card" content="${wide ? "summary_large_image" : "summary"}">`
+function ogImage(id) {
+  let url, w, h;
+  if (perNode && id) {
+    url = BASE + "/n/" + id + "/card.png"; w = 1200; h = 630;
+  } else if (hasShared) {
+    url = BASE + "/card.png"; ({ w, h } = pngSize(sharedCard));
+  } else {
+    return '<meta name="twitter:card" content="summary">';
+  }
+  return [
+    '<meta property="og:image" content="' + url + '">',
+    '<meta property="og:image:width" content="' + w + '">',
+    '<meta property="og:image:height" content="' + h + '">',
+    '<meta property="og:image:alt" content="A line drawing of a head with a thought cloud, beside the question">',
+    '<meta name="twitter:card" content="' + (w / h > 1.4 ? "summary_large_image" : "summary") + '">'
   ].join("\n");
-  console.log(`card.png ${w}x${h} -> ${wide ? "large banner" : "compact card"}`);
 }
 
 // Experiment: iMessage documents og:video with MP4 as the path to motion,
@@ -273,7 +281,7 @@ const shell = T("page.html");
 for (const n of nodes) {
   mkdirSync(join(out, "n", n.id), { recursive: true });
   writeFileSync(join(out, "n", n.id, "index.html"), fill(shell, {
-    BASE, OG_IMAGE, OG_VIDEO, URL: `${BASE}/n/${n.id}/`,
+    BASE, OG_IMAGE: ogImage(n.id), OG_VIDEO, URL: `${BASE}/n/${n.id}/`,
     TITLE_ATTR: attr(n.title),
     DESC_ATTR: attr(n.hook || n.action || n.question || n.why || ""),
     KIND_LABEL: attr(KINDS[n.kind].label),
@@ -283,7 +291,7 @@ for (const n of nodes) {
 }
 
 writeFileSync(join(out, "index.html"), fill(shell, {
-  BASE, OG_IMAGE, OG_VIDEO, URL: `${BASE}/`,
+  BASE, OG_IMAGE: ogImage(null), OG_VIDEO, URL: `${BASE}/`,
   TITLE_ATTR: "Threads",
   DESC_ATTR: attr(`${openRoots} open. Nothing owed.`),
   KIND_LABEL: "Weaves",

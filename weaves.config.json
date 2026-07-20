@@ -1,17 +1,20 @@
 {
   "siteName": "Weaves",
   "tagline": "spark · thread · workbench · bookshelf",
-
-  "baseUrl": "https://modernproteus.github.io/weaves",
-
-  "repo": "modernProteus/weaves",
-
-  "replyTo": "",
-
+  "baseUrl": "https://YOURNAME.github.io/weaves",
+  "repo": "YOURNAME/weaves",
   "staleAfterDays": 90,
-
   "people": {
-    "nick": "Nick",
-    "jeremy": "Jeremy"
-  }
+    "nick": {
+      "name": "Nick",
+      "contact": ""
+    },
+    "jeremy": {
+      "name": "Jeremy",
+      "contact": ""
+    }
+  },
+  "_people_note": "contact = phone or email. Reply buttons go to whoever authored the node, so each person fills in their own.",
+  "videoCards": false,
+  "_videoCards_note": "true only if the workflow runs tools/make_videos.sh; each node then gets its own animated card.mp4"
 }

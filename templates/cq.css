@@ -263,3 +263,10 @@ footer a:hover{color:var(--linen)}
 .held{font-family:"Space Mono",monospace;font-size:10.5px;letter-spacing:.09em;
   text-transform:uppercase;color:var(--linen-dim);margin:11px 0 0}
 .opt{color:var(--linen-dim);letter-spacing:.1em}
+
+/* stated time reads plainly; an estimate says so */
+.read-meta .time{color:var(--linen)}
+.read-meta .time.est{color:var(--linen-dim);font-style:italic}
+
+.row2{display:grid;grid-template-columns:1fr 1.4fr;gap:14px}
+@media (max-width:480px){.row2{grid-template-columns:1fr}}

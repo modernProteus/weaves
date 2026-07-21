@@ -25,6 +25,18 @@ body:
       placeholder: Why does making someone feel personally threatened make them more loyal to the group, not less?
     validations: { required: true }
 
+  - type: input
+    id: link_type
+    attributes:
+      label: Type
+      description: "Optional. reel, clip, post, video, podcast, news, essay, paper, reference, code, pdf, link. Guessed from the link if blank."
+
+  - type: input
+    id: time
+    attributes:
+      label: How long
+      description: Optional. Estimated from the type if blank.
+
   - type: textarea
     id: why
     attributes:

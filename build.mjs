@@ -75,26 +75,33 @@ const childrenOf = id => nodes.filter(n => n.parent === id)
 
 const KC = { thread: "k-thread", workbench: "k-workbench", bookshelf: "k-bookshelf" };
 
-// What kind of thing is on the other end of this link. Cheap, honest, and it
-// tells you at a glance whether you're being asked for 40 seconds or 40 minutes.
+// What kind of thing is on the other end of this link, and roughly how much of
+// your life it wants. Two different axes: a paper and a reel are different
+// kinds of ask even at the same length. One table, used at build time and
+// shipped to the composer so both agree.
+const TYPES = [
+  ["reel",      "instagram\\.com",                                    "under a minute"],
+  ["clip",      "tiktok\\.com",                                       "under a minute"],
+  ["post",      "(x\\.com|twitter\\.com|bsky)",                       "a minute"],
+  ["video",     "(youtube\\.com|youtu\\.be|vimeo\\.com)",            "a few minutes"],
+  ["podcast",   "(podcasts\\.apple|spotify|overcast|pocketcasts)",     "half an hour or more"],
+  ["news",      "(nytimes|washingtonpost|theguardian|bbc\\.|reuters|apnews|wsj\\.|npr\\.|atlantic|newyorker|economist|ft\\.com)", "5–10 min"],
+  ["essay",     "(substack|medium\\.com|aeon\\.co|nautil\\.us|quantamagazine)", "10–20 min"],
+  ["paper",     "(arxiv|jstor|sagepub|springer|nature\\.com|sciencedirect|pnas|doi\\.org|psycnet|ncbi|\\.edu$)", "30 min or more"],
+  ["reference", "(wikipedia|britannica|plato\\.stanford)",             "10–15 min"],
+  ["code",      "(github|gitlab)\\.com",                               "a browse"],
+  ["pdf",       null,                                                  "20–40 min"],
+  ["link",      null,                                                  "10–15 min"]
+];
+
+const TIME_BY_TYPE = Object.fromEntries(TYPES.map(([t, , time]) => [t, time]));
+
 function linkType(url = "") {
   let h = "";
   try { h = new URL(url).hostname.replace(/^www\./, ""); } catch { return ["link", ""]; }
-  const is = re => re.test(h);
-  const t =
-    is(/instagram\.com/)                              ? "reel"
-  : is(/tiktok\.com/)                                 ? "clip"
-  : is(/(youtube\.com|youtu\.be|vimeo\.com)/)         ? "video"
-  : is(/(podcasts\.apple|spotify|overcast|pocketcasts)/) ? "podcast"
-  : /\.pdf($|\?)/i.test(url)                          ? "pdf"
-  : is(/(arxiv|jstor|sagepub|springer|nature\.com|sciencedirect|pnas|doi\.org|psycnet|ncbi|\.edu$)/) ? "paper"
-  : is(/(substack|medium\.com)/)                      ? "essay"
-  : is(/(nytimes|washingtonpost|theguardian|bbc\.|reuters|apnews|wsj\.|npr\.|atlantic|newyorker|economist|ft\.com)/) ? "news"
-  : is(/(github|gitlab)\.com/)                        ? "code"
-  : is(/(wikipedia|britannica)/)                      ? "reference"
-  : is(/(x\.com|twitter\.com|bsky)/)                  ? "post"
-  : "link";
-  return [t, h];
+  if (/\.pdf($|\?)/i.test(url)) return ["pdf", h];
+  for (const [t, pat] of TYPES) if (pat && new RegExp(pat).test(h)) return [t, h];
+  return ["link", h];
 }
 
 // Lineage spine: one mark per ancestor, current one filled.
@@ -114,13 +121,16 @@ function spine(node, { mini = false } = {}) {
 }
 
 const readBlock = r => {
-  const [t, host] = linkType(r.url);
+  const [inferred, host] = linkType(r.url);
+  const t = r.type || inferred;
+  const stated = (r.time || "").trim();
+  const time = stated || TIME_BY_TYPE[t] || "";
   return `<a class="read t-${t}" href="${attr(r.url || "#")}" target="_blank" rel="noopener">
   <span class="read-title">${esc(r.title || "Untitled")}</span>
   <span class="read-meta">
     <span class="ltype">${esc(t)}</span>
     ${r.source ? `<span>${esc(r.source)}</span><span>·</span>` : ""}
-    <span>${esc(r.time || "")}</span>
+    ${time ? `<span class="time${stated ? "" : " est"}">${stated ? "" : "est. "}${esc(time)}</span>` : ""}
     ${host ? `<span class="host">${esc(host)}</span>` : ""}
     <span class="arrow" aria-hidden="true">&#8594;</span>
   </span>
@@ -402,6 +412,17 @@ writeFileSync(join(out, "new", "index.html"), fill(shell, {
       <label class="label" for="c-hook">The question</label>
       <textarea id="c-hook" rows="3" placeholder="The line they see under the link in Messages."></textarea>
 
+      <div class="row2">
+        <div>
+          <label class="label" for="c-type">Type</label>
+          <select id="c-type">${TYPES.map(([t]) => `<option value="${t}">${t}</option>`).join("")}</select>
+        </div>
+        <div>
+          <label class="label" for="c-time">How long <span class="opt">editable</span></label>
+          <input id="c-time" type="text" autocomplete="off">
+        </div>
+      </div>
+
       <label class="label" for="c-why">Why this <span class="opt">optional</span></label>
       <textarea id="c-why" rows="2" placeholder="A sentence of context, shown under the title."></textarea>
 
@@ -417,6 +438,35 @@ writeFileSync(join(out, "new", "index.html"), fill(shell, {
 }).replace("</body>", `<script>
 (function(){
   var repo = ${JSON.stringify(cfg.repo)};
+  var TYPES = ${JSON.stringify(TYPES)};
+  var typeSel = document.getElementById("c-type");
+  var timeIn  = document.getElementById("c-time");
+  var urlIn   = document.getElementById("c-url");
+  var touched = false;
+
+  function timeFor(t) {
+    for (var i = 0; i < TYPES.length; i++) if (TYPES[i][0] === t) return TYPES[i][2];
+    return "";
+  }
+  function inferFrom(u) {
+    var h; try { h = new URL(u).hostname.replace(/^www\\./, ""); } catch (e) { return "link"; }
+    if (/\\.pdf($|\\?)/i.test(u)) return "pdf";
+    for (var i = 0; i < TYPES.length; i++)
+      if (TYPES[i][1] && new RegExp(TYPES[i][1]).test(h)) return TYPES[i][0];
+    return "link";
+  }
+  // typing a link guesses the type and presets the time; both stay editable,
+  // and once you edit the time yourself we stop overwriting it
+  urlIn.addEventListener("input", function () {
+    var t = inferFrom(urlIn.value.trim());
+    typeSel.value = t;
+    if (!touched) timeIn.value = timeFor(t);
+  });
+  typeSel.addEventListener("change", function () {
+    if (!touched) timeIn.value = timeFor(typeSel.value);
+  });
+  timeIn.addEventListener("input", function () { touched = true; });
+  timeIn.value = timeFor(typeSel.value);
   var go = document.getElementById("c-go"), note = document.getElementById("c-note");
   var v = id => document.getElementById(id).value.trim();
   go.addEventListener("click", function(){
@@ -425,7 +475,7 @@ writeFileSync(join(out, "new", "index.html"), fill(shell, {
     var q = "template=spark.yml"
       + "&title=" + encodeURIComponent("Spark: " + t)
       + "&spark_title=" + encodeURIComponent(t)\n      + "&read_url=" + encodeURIComponent(u)
-      + "&hook=" + encodeURIComponent(h)\n      + (v("c-why") ? "&why=" + encodeURIComponent(v("c-why")) : "")
+      + "&hook=" + encodeURIComponent(h)\n      + "&link_type=" + encodeURIComponent(v("c-type"))\n      + "&time=" + encodeURIComponent(v("c-time"))\n      + (v("c-why") ? "&why=" + encodeURIComponent(v("c-why")) : "")
       + "&from=" + encodeURIComponent(v("c-from"));
     window.location.href = "https://github.com/" + repo + "/issues/new?" + q;
   });

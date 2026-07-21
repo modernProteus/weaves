@@ -62,12 +62,17 @@ if (isBranch) {
 } else {
   node.hook = f("the question");
   const url = f("link to the read", "link");
-  if (url) node.reads.push({
-    title: f("what the read is called") || title,
-    source: f("source line"),
-    time: f("how long it takes", "how long") || "~10 min",
-    url
-  });
+  if (url) {
+    const read = {
+      title: f("what the read is called") || title,
+      source: f("source line"),
+      time: f("how long it takes", "how long"),   // blank -> estimated at build time
+      url
+    };
+    const lt = f("type").toLowerCase();
+    if (lt) read.type = lt;                       // blank -> inferred from the host
+    node.reads.push(read);
+  }
   const what = f("sparked by");
   if (what) node.inspiration = {
     kind: f("sparked by — what kind") || "other",

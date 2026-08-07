@@ -7,6 +7,7 @@ on:
 permissions:
   contents: write
   issues: write
+  actions: write
 
 jobs:
   create:
@@ -46,6 +47,10 @@ jobs:
           git add nodes/
           git commit -m "cq: ${{ steps.make.outputs.id }}"
           git push
+
+      - if: steps.make.outcome == 'success'
+        env: { GH_TOKEN: ${{ github.token }} }
+        run: gh workflow run pages.yml --ref main
 
       - if: steps.make.outcome == 'success'
         uses: actions/github-script@v7

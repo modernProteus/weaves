@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Not a Local Failure — one page</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Karla:wght@400;700&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --indigo:#131A2E; --linen:#EDE6D8; --muted:#8E96AE;
+    --madder:#BE4438; --ochre:#B89230;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--indigo); color:var(--linen);
+    font-family:'Karla',sans-serif; font-size:17px; line-height:1.65;
+    padding:3.5rem 1.5rem 4rem;
+  }
+  .page{max-width:680px; margin:0 auto;}
+  .eyebrow{
+    font-family:'Space Mono',monospace; font-size:.72rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--ochre); margin-bottom:.5rem;
+  }
+  h1{
+    font-family:'Fraunces',serif; font-weight:600; font-size:clamp(2rem,6vw,3rem);
+    line-height:1.1; margin-bottom:.75rem;
+  }
+  .dek{color:var(--muted); font-size:1.05rem; margin-bottom:2.5rem; max-width:56ch;}
+  .numbers{
+    display:grid; grid-template-columns:repeat(2,1fr); gap:1.5rem 2rem;
+    border-top:1px solid rgba(237,230,216,.18); border-bottom:1px solid rgba(237,230,216,.18);
+    padding:1.75rem 0; margin-bottom:2.75rem;
+  }
+  .num .big{font-family:'Fraunces',serif; font-size:2.1rem; font-weight:600; line-height:1;}
+  .num .lbl{font-family:'Space Mono',monospace; font-size:.7rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--muted); margin-top:.45rem;}
+  section{margin-bottom:2.5rem;}
+  h2{font-family:'Fraunces',serif; font-weight:600; font-size:1.3rem; margin-bottom:.6rem;}
+  p{margin-bottom:1rem; max-width:62ch;}
+  p:last-child{margin-bottom:0;}
+  .question{
+    border-left:3px solid var(--madder); padding-left:1.25rem; margin-top:3rem;
+  }
+  .question .eyebrow{color:var(--madder);}
+  .question p{
+    font-family:'Fraunces',serif; font-size:1.35rem; line-height:1.4;
+  }
+  .src{
+    margin-top:3rem; font-family:'Space Mono',monospace; font-size:.72rem;
+    color:var(--muted); line-height:1.9;
+  }
+  .src a{color:var(--muted);}
+  @media print{
+    body{background:#fff; color:#131A2E; padding:1.5rem;}
+    .num .lbl,.src{color:#555;}
+    .numbers{border-color:#ccc;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="eyebrow">Texas · public schools · 2023–2026</div>
+  <h1>Not a Local Failure</h1>
+  <p class="dek">School closures read as local stories: a shrinking district, an empty
+  building, a hard vote at a board meeting. The pattern underneath is statewide, and it
+  runs through Austin.</p>
+
+  <div class="numbers">
+    <div class="num"><div class="big">135</div><div class="lbl">schools closed or approved to close since late 2023</div></div>
+    <div class="num"><div class="big">22 → 50 → 55</div><div class="lbl">closures voted, 2024 → 2025 → first half of 2026</div></div>
+    <div class="num"><div class="big">$55</div><div class="lbl">per-pupil allotment increase, 2025 — vs. $1,300+ needed to match inflation since 2019</div></div>
+    <div class="num"><div class="big">$1B</div><div class="lbl">appropriated for the private-school voucher program launching fall 2026</div></div>
+  </div>
+
+  <section>
+    <h2>Two doors out, one hallway in</h2>
+    <p>Closures happen through two distinct mechanisms. The first is budget math: state
+    funding follows attendance, enrollment falls, deficits grow, and local boards close
+    campuses to survive. Nobody cites test scores; the spreadsheet does the work. The
+    second is accountability law: if one campus fails state ratings five years running,
+    Texas must close it or take over the entire district. Houston, Fort Worth, and
+    Beaumont are now run by state-appointed boards, and those boards are closing schools
+    in bulk — Fort Worth alone has 19 campuses slated by 2029.</p>
+    <p>Different doors, same hallway. Both trace to the same funding position: Texas
+    ranks in the bottom ten states for per-pupil spending, and went six years without a
+    comprehensive increase while the governor conditioned any new money on a voucher
+    program passing first.</p>
+  </section>
+
+  <section>
+    <h2>The exit ramp and who can use it</h2>
+    <p>The state's built alternative is the Education Savings Account: roughly $10,474
+    per student, first payments out July 2026. Early data complicates the story in both
+    directions. Most applicants were already in private school, and recipients skew
+    whiter and wealthier than the public-school population — so the program isn't yet
+    draining public schools so much as subsidizing existing private enrollment. But that
+    same fact sharpens the equity problem: the voucher rarely covers full tuition,
+    private schools aren't required to admit anyone, and many rural areas have no
+    private option at all. The communities losing their schools are largely the ones
+    that can't use the ramp.</p>
+  </section>
+
+  <section>
+    <h2>What cuts against this</h2>
+    <p>Honest counterweights: enrollment decline is real and partly demographic — birth
+    rates and charter growth predate vouchers. Consolidation defenders argue that
+    half-empty buildings spread resources thinner per student, so closing campuses can
+    concentrate funding and improve what each remaining student receives. Whether
+    displaced students actually end up better off is an empirical question, and the
+    closure data itself comes from a public-school advocacy nonprofit. The sequence of
+    funding decisions, though, is on the public record.</p>
+  </section>
+
+  <div class="question">
+    <div class="eyebrow">The open question</div>
+    <p>What does a local failure mean when it happens in every region of the state at
+    once?</p>
+  </div>
+
+  <div class="src">
+    sources · Texas Observer (Jun 2026) · Our Schools Our Democracy closure data ·
+    Houston Public Media (Jun 2026) · Dallas Observer (Apr 2026) · Raise Your Hand
+    Texas · NEA rankings<br>
+    <a href="https://www.texasobserver.org/school-closures-across-texas-not-local-failure/">texasobserver.org/school-closures-across-texas-not-local-failure</a>
+  </div>
+
+</div>
+</body>
+</html>

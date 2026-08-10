@@ -1,0 +1,53 @@
+{
+  "id": "not-a-local-failure",
+  "kind": "thread",
+  "parent": null,
+  "title": "Not a Local Failure",
+  "from": "nick",
+  "created": "2026-08-09",
+  "status": "open",
+
+  "why": "Came out of a conversation about whether the closures and the voucher rollout are one story or two. The closure map is the piece that does not care which.",
+
+  "hook": "School closures read as local stories: a shrinking district, an empty building, a hard vote. Texas has now closed or approved closing 135 schools, in every region at once. What does a local failure mean when it happens everywhere?",
+
+  "reads": [
+    {
+      "title": "School Closures Are Escalating Across Texas. 'It's Not a Local Failure.'",
+      "source": "Josephine Lee, Texas Observer, Jun 2026",
+      "time": "~4 min",
+      "url": "https://www.texasobserver.org/school-closures-across-texas-not-local-failure/"
+    },
+    {
+      "title": "Which families are using ESAs? Texas' first school vouchers",
+      "source": "Edison & Dey, Texas Tribune, Aug 2026",
+      "time": "~4 min",
+      "url": "https://www.texastribune.org/2026/08/03/esa-students-texas-school-vouchers-first-year/",
+      "note": "Staged before lighting. The state's own first-year report: 85,000 accepted, money mostly to low-income families, and one number conspicuously absent."
+    }
+  ],
+
+  "slateNote": "The first says the state starved public schools to build an exit ramp, and the closures are the bill. The second, from the state's own report, says the ramp's first-year money went mostly to low-income families, barely touched the wealthiest tier, and mostly did not go to kids leaving public schools. If both hold, the drain has not really started and the money is not going to the rich, yet 135 schools closed anyway. The harm ran ahead of the alternative, and the report omits the one number that would connect them: how many recipients ever sat in a public classroom.",
+
+  "flagNote": "Words that import the verdict into the premise, from either direction.",
+  "chips": ["failing schools", "right-sizing", "underutilized", "scam", "handout", "war on public schools"],
+
+  "notes": [
+    {
+      "author": "nick",
+      "date": "2026-08-09",
+      "prose": "One-page synthesis of the Texas picture: the two closure mechanisms, the funding sequence, the exit-ramp math, and what cuts against. Interior material, not a read; it agrees with the Observer piece, which is exactly why it lives here and not in reads[]. Needs one revision against the Aug 3 report: recipients skew whiter, but not wealthier by the state's income tiers. The access gap is tuition, admissions discretion, and geography, not income gatekeeping.",
+      "refs": [{ "label": "Not a Local Failure, one page (PDF)", "url": "assets/docs/not-a-local-failure.pdf" }]
+    },
+    {
+      "author": "nick",
+      "date": "2026-08-09",
+      "prose": "Third strand, held in reserve: the K-12 Dive national closure tracker. It attacks causation rather than equity; closures are spiking in states with no voucher program and no Abbott, driven by birthrates. If the thread broadens toward 'how much of the Texas story is Texas', this is the read to add.",
+      "refs": [{ "label": "K-12 Dive national closure tracker", "url": "https://www.k12dive.com/news/public-schools-closure-tracker-enrollment/809364/" }]
+    }
+  ],
+
+  "exchange": [],
+  "log": [],
+  "lit": false
+}

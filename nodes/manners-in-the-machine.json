@@ -1,0 +1,23 @@
+{
+  "id": "manners-in-the-machine",
+  "kind": "thread",
+  "parent": null,
+  "title": "Manners in the Machine",
+  "from": "nick",
+  "created": "2026-08-10",
+  "status": "open",
+  "why": "The standard complaint prices politeness in watts and calls it waste. The measurement says the models inherited culture-specific manners, and the cost of dropping courtesy may land on the person, not the grid.",
+  "chips": [],
+  "flagNote": "",
+  "reads": [
+    {
+      "title": "Manners in the Machine",
+      "source": "",
+      "time": "~20 min",
+      "url": "https://arxiv.org/abs/2402.14531"
+    }
+  ],
+  "exchange": [],
+  "log": [],
+  "hook": "Courtesy toward machines is supposed to be wasted effort. Researchers measured it: rude prompts degrade the answers, extra politeness does not keep helping, and the sweet spot shifts by language. Where did a machine get manners?"
+}

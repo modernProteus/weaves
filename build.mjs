@@ -285,6 +285,7 @@ for (const f of ["cq.css", "cq.js"]) cpSync(join(root, "templates", f), join(out
 //   3. none at all
 // A 404 og:image degrades the card in some clients, so we only ever claim one
 // that exists. Shape decides layout: wide gives the banner, square the compact card.
+if (existsSync(join(root, "static"))) cpSync(join(root, "static"), out, { recursive: true });
 const sharedCard = join(root, "assets", "card.png");
 const hasShared = existsSync(sharedCard);
 if (hasShared) cpSync(sharedCard, join(out, "card.png"));

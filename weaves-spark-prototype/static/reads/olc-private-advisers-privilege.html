@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Executive privilege for people who don't work for the government</title>
+<meta name="description" content="A short brief on the August 10, 2026 OLC opinion extending the presidential communications privilege to private advisers — what it holds, how it gets there, and the strongest case on each side.">
+<meta property="og:title" content="Executive privilege for people who don't work for the government">
+<meta property="og:description" content="The OLC's August 2026 opinion on presidential communications with private advisers: the three-part test, the reasoning, the limits it claims, and the case on each side.">
+<meta property="og:type" content="article">
+<style>
+  :root {
+    --bg: #faf7f2;
+    --panel: #ffffff;
+    --ink: #1c1a17;
+    --ink-soft: #55504a;
+    --ink-faint: #857e75;
+    --rule: #e3ddd3;
+    --accent: #8a5a2b;
+    --accent-soft: #f3ece2;
+    --for: #2f5d50;
+    --for-bg: #eef4f1;
+    --against: #7a3b3b;
+    --against-bg: #f7eeee;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16151a;
+      --panel: #1e1d23;
+      --ink: #ece8e1;
+      --ink-soft: #b6b0a7;
+      --ink-faint: #8b857c;
+      --rule: #33313a;
+      --accent: #d9a066;
+      --accent-soft: #2a2520;
+      --for: #8fc9b4;
+      --for-bg: #1c2723;
+      --against: #e0a0a0;
+      --against-bg: #2a1f1f;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 400 18px/1.65 Charter, "Iowan Old Style", Georgia, "Times New Roman", serif;
+  }
+  .wrap { max-width: 43rem; margin: 0 auto; padding: 3.5rem 1.5rem 6rem; }
+  header { border-bottom: 1px solid var(--rule); padding-bottom: 1.75rem; margin-bottom: 2.5rem; }
+  .kicker {
+    font: 600 0.72rem/1 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent);
+    margin: 0 0 1rem;
+  }
+  h1 { font-size: 2.05rem; line-height: 1.18; margin: 0 0 0.9rem; letter-spacing: -0.015em; font-weight: 600; }
+  .standfirst { font-size: 1.08rem; color: var(--ink-soft); margin: 0 0 1.5rem; }
+  .meta {
+    font: 400 0.82rem/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--ink-faint); display: flex; flex-wrap: wrap; gap: 0.4rem 1.1rem;
+  }
+  .meta span { white-space: nowrap; }
+  h2 {
+    font-size: 1.32rem; line-height: 1.3; margin: 3rem 0 1rem;
+    letter-spacing: -0.01em; font-weight: 600;
+  }
+  h3 {
+    font: 600 0.78rem/1.4 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint);
+    margin: 2rem 0 0.6rem;
+  }
+  p { margin: 0 0 1.1rem; }
+  a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  ul, ol { margin: 0 0 1.1rem; padding-left: 1.3rem; }
+  li { margin-bottom: 0.55rem; }
+  blockquote {
+    margin: 1.4rem 0; padding: 0 0 0 1.1rem;
+    border-left: 3px solid var(--accent);
+    color: var(--ink-soft); font-style: italic;
+  }
+  blockquote p:last-child { margin-bottom: 0; }
+  .card {
+    background: var(--panel); border: 1px solid var(--rule); border-radius: 10px;
+    padding: 1.4rem 1.5rem; margin: 1.6rem 0;
+  }
+  .card.tldr { background: var(--accent-soft); border-color: transparent; }
+  .card.tldr ul { margin-bottom: 0; }
+  .card.tldr li::marker { color: var(--accent); }
+  .test { counter-reset: t; list-style: none; padding-left: 0; margin: 1rem 0 0; }
+  .test li {
+    counter-increment: t; position: relative; padding-left: 2.4rem; margin-bottom: 0.85rem;
+  }
+  .test li::before {
+    content: counter(t); position: absolute; left: 0; top: 0.15rem;
+    width: 1.6rem; height: 1.6rem; border-radius: 50%;
+    background: var(--accent); color: var(--bg);
+    font: 600 0.85rem/1.6rem ui-sans-serif, system-ui, sans-serif;
+    text-align: center;
+  }
+  .split { display: grid; gap: 1rem; margin: 1.4rem 0; }
+  @media (min-width: 40rem) { .split { grid-template-columns: 1fr 1fr; } }
+  .side { border-radius: 10px; padding: 1.2rem 1.3rem; border: 1px solid transparent; }
+  .side.for { background: var(--for-bg); }
+  .side.against { background: var(--against-bg); }
+  .side h4 {
+    font: 600 0.75rem/1.4 ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: 0.09em; text-transform: uppercase; margin: 0 0 0.7rem;
+  }
+  .side.for h4 { color: var(--for); }
+  .side.against h4 { color: var(--against); }
+  .side ul { margin: 0; padding-left: 1.1rem; font-size: 0.95rem; }
+  .side li { margin-bottom: 0.6rem; }
+  .side li:last-child { margin-bottom: 0; }
+  .src { border-top: 1px solid var(--rule); padding-top: 1.2rem; margin-top: 1.2rem; }
+  .src:first-of-type { border-top: none; padding-top: 0; }
+  .src h4 { font-size: 1.02rem; margin: 0 0 0.15rem; font-weight: 600; }
+  .src h4 a { text-decoration: none; }
+  .src h4 a:hover { text-decoration: underline; }
+  .src .byline {
+    font: 400 0.8rem/1.5 ui-sans-serif, system-ui, sans-serif;
+    color: var(--ink-faint); margin: 0 0 0.6rem;
+  }
+  .src p { font-size: 0.97rem; margin-bottom: 0.6rem; }
+  .tag {
+    display: inline-block; font: 600 0.66rem/1 ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 0.32rem 0.55rem; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent); margin-right: 0.35rem;
+  }
+  .note {
+    font: 400 0.87rem/1.6 ui-sans-serif, system-ui, sans-serif;
+    color: var(--ink-faint); border-top: 1px solid var(--rule);
+    margin-top: 3.5rem; padding-top: 1.2rem;
+  }
+  .note a { color: var(--ink-faint); }
+  .pull {
+    font-size: 1.15rem; line-height: 1.5; color: var(--ink);
+    border-left: none; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+    padding: 1.3rem 0; margin: 2.2rem 0; font-style: normal;
+  }
+  .pull cite { display: block; font: 400 0.82rem/1.5 ui-sans-serif, system-ui, sans-serif;
+    color: var(--ink-faint); font-style: normal; margin-top: 0.7rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="kicker">The Read</p>
+  <h1>Executive privilege for people who don&rsquo;t work for the government</h1>
+  <p class="standfirst">On August 10, 2026, the Justice Department&rsquo;s Office of Legal Counsel concluded that a president can assert executive privilege over conversations with advisers who are not in the Executive Branch at all. Here is what the opinion actually holds, how it gets there, and where the argument is contested.</p>
+  <div class="meta">
+    <span>Primary source: <a href="https://www.justice.gov/olc/media/1457271/dl">OLC opinion (PDF, 21 pp.)</a></span>
+    <span>Aug 10, 2026</span>
+    <span>~9 min read</span>
+  </div>
+</header>
+
+<div class="card tldr">
+  <h3 style="margin-top:0">TL;DR</h3>
+  <ul>
+    <li><strong>What it does.</strong> OLC concludes the presidential communications privilege can cover the president&rsquo;s confidential conversations with private advisers &mdash; people outside the Executive Branch entirely.</li>
+    <li><strong>The rule.</strong> A three-part test: the communication must relate to official presidential decisionmaking, involve or reflect communications with the president or his direct advisers, and be confidential.</li>
+    <li><strong>The move.</strong> The privilege is made to turn on <em>subject matter and proximity</em>, not on whether the participant is a government employee.</li>
+    <li><strong>Who counts as &ldquo;private.&rdquo;</strong> Footnote 1 defines it expansively: anyone the president consults outside the Executive Branch &mdash; members of the public, state officials, even employees of other federal branches.</li>
+    <li><strong>Why now.</strong> Reporting ties it to the run-up to the midterms and to a live fight over a subpoena to Trump adviser Boris Epshteyn in the American Bar Association litigation.</li>
+    <li><strong>Its status.</strong> OLC opinions bind the Executive Branch, not courts. No court has adopted this rule.</li>
+  </ul>
+</div>
+
+<h2>The operative rule</h2>
+
+<p>Strip away the history and the opinion resolves into one test. A communication falls inside the presidential communications privilege when it:</p>
+
+<ol class="test">
+  <li>relates to official presidential decisionmaking;</li>
+  <li>involves or reflects communications with the president or his direct advisers; and</li>
+  <li>is confidential.</li>
+</ol>
+
+<p style="margin-top:1.2rem">Notice what is <em>not</em> in the list: any requirement that the person on the other end of the conversation work for the government. That absence is the whole opinion. Everything else is the argument for why the absence is correct.</p>
+
+<h2>How the opinion gets there</h2>
+
+<h3>1. The privilege is functional, not organizational</h3>
+<p>The starting premise is that executive privilege exists to protect a <em>process</em> &mdash; presidential decisionmaking &mdash; rather than a <em>class of people</em>. If the point is candor in the president&rsquo;s deliberations, then the test should track whether a conversation is part of those deliberations, not whether the participant draws a federal paycheck.</p>
+
+<h3>2. The president cannot be limited to in-house advice</h3>
+<p>Article II vests the executive power in one person who cannot possibly exercise it alone. OLC argues that confining the privilege to intragovernmental communications would, in its words, &ldquo;foreclose the President from relying on an array of important sources&rdquo; &mdash; and that the resulting narrowing of presidential information &ldquo;ultimately would harm the public itself.&rdquo;</p>
+
+<h3>3. Historical practice supports mixed advisory networks</h3>
+<p>The opinion runs the standard lineage &mdash; Washington withholding Jay Treaty documents in 1795, Hamilton and Jay on executive secrecy in <em>The Federalist</em> &mdash; and adds two examples chosen to make the point about outsiders specifically: Andrew Jackson&rsquo;s &ldquo;Kitchen Cabinet&rdquo; and Franklin Roosevelt&rsquo;s &ldquo;Brain Trust.&rdquo; Presidents have always taken counsel from people who hold no office.</p>
+
+<h3>4. Outsiders may need confidentiality more, not less</h3>
+<p>This is the opinion&rsquo;s most distinctive claim. Government officials are bound into a structure that already channels their candor; a private citizen has no such protection and faces the full social cost of being associated with an unpopular position. So private advisers, the opinion reasons, may have a <em>greater</em> need for confidentiality in order to speak freely.</p>
+
+<blockquote class="pull">
+  <p>&ldquo;A President and those who assist him must be free to explore alternatives in the process of shaping policies and making decisions and to do so in a way many would be unwilling to express except privately.&rdquo;</p>
+  <cite>United States v. Nixon, quoted in the opinion</cite>
+</blockquote>
+
+<h3>5. The doctrinal hook</h3>
+<p>The load-bearing citation is <em>In re Sealed Case</em>, 121 F.3d 729 (D.C. Cir. 1997) &mdash; the Espy case &mdash; for the proposition that the privilege protects advisers&rsquo; communications even without the president personally in the room, and that the presidency needs &ldquo;sufficient elbow room&rdquo; to gather information from all sources. It pairs this with <em>Association of American Physicians &amp; Surgeons v. Clinton</em>, 997 F.2d 898 (D.C. Cir. 1993), which acknowledged the president&rsquo;s capacity to solicit direct advice on any subject from private citizens, and <em>United States v. AT&amp;T</em>, 551 F.2d 384 (D.C. Cir. 1976), for the idea that a confidentiality interest survives when material sits in third-party hands.</p>
+
+<h2>Limits the opinion places on itself</h2>
+
+<p>The document is careful to disclaim a blanket rule, and those disclaimers are worth reading closely, because they are where any future fight gets litigated.</p>
+
+<ul>
+  <li><strong>Official, not personal.</strong> The privilege does not reach the president&rsquo;s personal or non-official affairs. But footnote 6 concedes the line is hard to draw, since the president &ldquo;is the only person who alone composes a branch of government.&rdquo;</li>
+  <li><strong>Proximity required.</strong> &ldquo;Not every person who plays a role in the development of presidential advice, no matter how remote and removed from the President, can qualify for the privilege.&rdquo;</li>
+  <li><strong>Confidentiality must be real and continuous.</strong> A communication has to be confidential when made and stay that way. Authorized, deliberate disclosure waives the privilege as to what was disclosed.</li>
+  <li><strong>But waiver is narrow.</strong> Handing Congress some documents does not extinguish privilege over related ones &mdash; doing so, the opinion says, would punish rather than encourage inter-branch accommodation.</li>
+  <li><strong>Not everything is covered.</strong> &ldquo;Everything the President tells a private individual is not privileged.&rdquo;</li>
+  <li><strong>Narrow subject.</strong> The memo addresses only the presidential communications component of executive privilege, and only the <em>president&rsquo;s</em> communications with private advisers. Footnote 7 expressly leaves open whether other White House officials&rsquo; conversations with private persons get the same treatment.</li>
+</ul>
+
+<h2>The case on each side</h2>
+
+<div class="split">
+  <div class="side for">
+    <h4>The strongest case for</h4>
+    <ul>
+      <li>Executive privilege has always been justified by the need for candid deliberation. A rule keyed to employment status protects the same conversation differently depending on an irrelevant fact about the speaker.</li>
+      <li>Presidents genuinely do consult outsiders, and always have. A rule that penalizes this pushes advice toward whoever happens to be on the payroll &mdash; a worse information environment, not a more accountable one.</li>
+      <li><em>In re Sealed Case</em> already decoupled the privilege from the president&rsquo;s personal presence; the opinion argues it is extending an existing logic rather than inventing one.</li>
+      <li>The stated limits are real constraints: official business only, proximity required, confidentiality maintained. On paper this is not a blanket shield.</li>
+      <li>OLC opinions are how the Executive Branch tells itself what it thinks the law is. Writing down a position in advance is more transparent than asserting it ad hoc in litigation.</li>
+    </ul>
+  </div>
+  <div class="side against">
+    <h4>The strongest case against</h4>
+    <ul>
+      <li><strong>The key precedent cuts the other way.</strong> <em>In re Sealed Case</em> said the privilege &ldquo;should be construed as narrowly as is consistent with ensuring that the confidentiality of the President&rsquo;s decisionmaking process is adequately protected,&rdquo; reached only &ldquo;members of an immediate White House adviser&rsquo;s staff who have broad and significant responsibility,&rdquo; and stated expressly that it &ldquo;should not extend to staff outside the White House in executive branch agencies.&rdquo; <em>Judicial Watch v. DOJ</em>, 365 F.3d 1108 (D.C. Cir. 2004), reinforced this, declining to extend the privilege to DOJ documents and noting that the claim &ldquo;become[s] more attenuated the further away the advisers are from the President operationally.&rdquo; Both used organizational closeness to the White House as the limiting principle &mdash; the very thing this opinion sets aside.</li>
+      <li><strong>Privilege over a person you cannot control.</strong> Ilya Somin&rsquo;s formulation: &ldquo;If President Biden calls me up to discuss some issue&hellip; he can&rsquo;t then use executive privilege to keep me from telling Congress about it.&rdquo; A privilege that binds non-employees is a novel thing.</li>
+      <li><strong>Courts have a track record here.</strong> Nixon and Clinton lost privilege fights in the courts. The Obama administration lost the Fast and Furious dispute &mdash; though on the deliberative-process prong, not this one. And in <em>Trump v. Thompson</em> the D.C. Circuit (Dec. 2021) and Supreme Court (Jan. 2022) both declined to block release of January 6&ndash;related presidential records.</li>
+      <li><strong>The definition swallows the limit.</strong> Footnote 1&rsquo;s &ldquo;private advisers&rdquo; includes state officials and employees of other federal branches, not just informal counselors.</li>
+      <li><strong>Timing is evidence.</strong> POGO&rsquo;s Scott Amey reads it alongside the April 2026 opinion on the Presidential Records Act as part of a pattern: &ldquo;It&rsquo;s hard not to read this as anything other than an attempt to gain cover if Congress conducts oversight hearings.&rdquo;</li>
+    </ul>
+  </div>
+</div>
+
+<h2>The unresolved question</h2>
+
+<p>The opinion and its critics agree on the purpose of the privilege &mdash; protecting candid presidential deliberation &mdash; and disagree about what follows from it. If the purpose is functional, the boundary should be functional too, and employment status is arbitrary. If the purpose is functional but the boundary is not policeable without some organizational marker, then &ldquo;did this person work for the Executive Branch&rdquo; is doing real work as a proxy that nothing else replaces.</p>
+
+<p>That is the live question, and it is not obviously resolved by either side&rsquo;s preferred authority. It also has not been tested: no court has ruled on this rule. The Epshteyn subpoena in the ABA litigation is the nearest vehicle.</p>
+
+<h2>The four takes, evaluated</h2>
+
+<div class="src">
+  <h4><a href="https://thehill.com/homenews/administration/6022381-doj-executive-privilege-outside-advisers/">DOJ opinion extends executive privilege to president&rsquo;s communications with private advisers</a></h4>
+  <p class="byline">Rebecca Beitsch &middot; The Hill &middot; Aug 11, 2026</p>
+  <p><span class="tag">Straight report</span> The cleanest neutral account of what the memo says. Quotes the opinion directly, notes it is non-binding, and supplies the most useful piece of context: the April 1, 2026 OLC opinion concluding the Presidential Records Act is <em>unconstitutional</em>, and Judge John Bates&rsquo;s May 20 preliminary injunction ordering the White House to comply with it anyway. No outside experts quoted, so no evaluation of the legal argument.</p>
+  <p><em>Read it for:</em> the pattern this opinion sits inside. <em>Not for:</em> whether the reasoning holds.</p>
+</div>
+
+<div class="src">
+  <h4><a href="https://www.cbsnews.com/news/trumps-outside-advisers-executive-privilege-justice-dept-office-legal-counsel/">DOJ legal office says Trump&rsquo;s outside advisers can be shielded by executive privilege</a></h4>
+  <p class="byline">Jacob Rosen &middot; CBS News &middot; Aug 11, 2026</p>
+  <p><span class="tag">Straight report</span> <span class="tag">Best on stakes</span> Adds the concrete application the other pieces mostly gesture at: the subpoena to Boris Epshteyn from the American Bar Association over alleged White House pressure on major law firms, and DOJ&rsquo;s motion to quash it on the ground that Epshteyn was giving privileged presidential counsel. That moves the opinion from abstraction to a specific document DOJ wants to keep out of a specific proceeding.</p>
+  <p><em>Read it for:</em> what the opinion is being used to do right now.</p>
+</div>
+
+<div class="src">
+  <h4><a href="https://reason.com/2026/08/12/trump-administration-claims-executive-privilege-over-white-house-conversations-with-private-advisers/">Trump Administration Claims Executive Privilege Over White House Conversations With Private Advisers</a></h4>
+  <p class="byline">C.J. Ciaramella &middot; Reason &middot; Aug 12, 2026</p>
+  <p><span class="tag">Critical</span> <span class="tag">Most useful counter-authority</span> The piece that does the most work assembling the other side: the Somin quote, POGO&rsquo;s Amey, and a run of cases where privilege claims failed. Read it with three corrections. First, its <em>Trump v. Thompson</em> claim overreaches: that case concerned a <em>former</em> president trying to block release of his own records over the incumbent&rsquo;s non-objection, not the privilege status of private parties, and the Supreme Court expressly said the D.C. Circuit&rsquo;s former-president reasoning was non-binding dicta. Second, the Supreme Court acted on January 19, <em>2022</em>, not 2021. Third, Fast and Furious turned on the deliberative-process privilege, a different prong from the one at issue here.</p>
+  <p><em>Read it for:</em> the strongest assembled critique. <em>Discount:</em> the case-law framing.</p>
+</div>
+
+<div class="src">
+  <h4><a href="https://www.lawdork.com/p/the-presumption-of-irregularity">The presumption of irregularity</a></h4>
+  <p class="byline">Chris Geidner &middot; Law Dork &middot; Aug 14, 2026</p>
+  <p><span class="tag">Analysis</span> <span class="tag">Widest frame</span> Not really about this opinion. Geidner&rsquo;s argument is that the courts&rsquo; traditional &ldquo;presumption of regularity&rdquo; toward DOJ &mdash; the default assumption that the department is acting in good faith &mdash; has become untenable, and he uses this opinion as one of four data points alongside a sanctions appeal, Epstein-files non-compliance, and an HSI surveillance operation. Useful precisely because it changes the question: not &ldquo;is the legal reasoning sound&rdquo; but &ldquo;what deference is owed to the institution making it.&rdquo;</p>
+  <p><em>Read it for:</em> the meta-question. <em>Note:</em> it presumes the answer to the first-order legal question rather than arguing it.</p>
+</div>
+
+<h2>If you read only one thing after this</h2>
+<p>Read <a href="https://www.justice.gov/olc/media/1457271/dl">the opinion itself</a>. It is 21 pages and unusually readable, and the parts that matter most &mdash; footnote 1&rsquo;s definition of &ldquo;private adviser,&rdquo; footnote 6 on the official/personal line, footnote 7 on what it declines to decide &mdash; are exactly the parts that do not survive summarization.</p>
+
+<p class="note">
+  Quotations from the opinion are drawn from the PDF linked above; case citations are as given there. This brief summarizes and characterizes a contested legal document and is not legal advice.
+  <br><br>
+  Sources: <a href="https://www.justice.gov/olc/media/1457271/dl">OLC, <em>Applicability of Executive Privilege to Presidential Communications with Private Advisers</em> (Aug. 10, 2026)</a> &middot; <a href="https://thehill.com/homenews/administration/6022381-doj-executive-privilege-outside-advisers/">The Hill</a> &middot; <a href="https://www.cbsnews.com/news/trumps-outside-advisers-executive-privilege-justice-dept-office-legal-counsel/">CBS News</a> &middot; <a href="https://reason.com/2026/08/12/trump-administration-claims-executive-privilege-over-white-house-conversations-with-private-advisers/">Reason</a> &middot; <a href="https://www.lawdork.com/p/the-presumption-of-irregularity">Law Dork</a> &middot; <a href="https://www.congress.gov/crs-product/R47102">CRS, <em>Executive Privilege and Presidential Communications: Judicial Principles</em></a>
+</p>
+
+</div>
+</body>
+</html>

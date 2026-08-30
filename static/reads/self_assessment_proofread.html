@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Annual Self-Assessment · Proofreading Copy</title>
+<style>
+:root{
+ --ink:#22252a;--ink2:#555c66;--ink3:#8b939d;
+ --paper:#fdfcfa;--card:#fff;--line:#e6e2db;
+ --ac:#7a5c3e;
+ --note:#2f6f5e;--note-s:#eaf4f0;
+ --plat:#1f6f8b;--plat-s:#e8f2f6;
+ --prog:#8a5a2b;--prog-s:#f7efe5;
+ --team:#6b5b95;--team-s:#f0edf7;
+ --pers:#a03a5c;--pers-s:#fbecf1;
+ --tool:#2d7a4f;--tool-s:#e9f5ee;
+ --jrg:#6c7079;--jrg-s:#eeeff1;
+}
+@media (prefers-color-scheme:dark){:root{
+ --ink:#eae7e1;--ink2:#a9b0b8;--ink3:#7b838c;
+ --paper:#17181a;--card:#1f2125;--line:#31343a;
+ --ac:#d3ac7d;
+ --note:#7cc7ad;--note-s:#16281f;
+ --plat:#6fc3dd;--plat-s:#12262e;
+ --prog:#e0aa6e;--prog-s:#2b2015;
+ --team:#b7a6e0;--team-s:#211c2e;
+ --pers:#e88aa6;--pers-s:#2d1a21;
+ --tool:#7ecb9b;--tool-s:#14241b;
+ --jrg:#9aa1aa;--jrg-s:#24262a;
+}}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);
+ font:17px/1.75 "Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+ padding-bottom:70px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding:0 22px}
+
+header{padding:44px 0 22px;border-bottom:2px solid var(--line);margin-bottom:28px;text-align:center}
+.eb{font:11px/1 ui-monospace,"SF Mono",monospace;letter-spacing:.18em;color:var(--ink3);
+ text-transform:uppercase;margin-bottom:13px}
+h1{font:400 33px/1.15 "Iowan Old Style",Georgia,serif;letter-spacing:-.01em}
+.sub{margin-top:10px;color:var(--ink3);font-size:14px;font-style:italic}
+
+.hello{margin:0 0 26px;padding:19px 21px;background:var(--note-s);border-radius:13px;
+ border:1px solid var(--note);font-size:15.5px;line-height:1.68;color:var(--ink2)}
+.hello .t{font:600 12px/1 ui-monospace,monospace;letter-spacing:.13em;text-transform:uppercase;
+ color:var(--note);display:block;margin-bottom:11px}
+.hello p{margin-bottom:11px}
+.hello p:last-child{margin-bottom:0}
+.hello b{color:var(--ink)}
+.hello ul{margin:9px 0 0;padding-left:19px}
+.hello li{margin:5px 0}
+
+/* ── entity tags ───────────────────────────────────────── */
+.legend{margin:0 0 30px;padding:15px 19px;background:var(--card);border-radius:13px;
+ border:1px solid var(--line);font-size:14.5px;color:var(--ink2)}
+.legend .t{font:600 12px/1 ui-monospace,monospace;letter-spacing:.13em;text-transform:uppercase;
+ color:var(--ink3);display:block;margin-bottom:5px}
+.legend .h{font-size:13.5px;font-style:italic;color:var(--ink3);margin-bottom:11px}
+.lg{display:flex;flex-wrap:wrap;gap:7px 9px}
+.lg span{font-size:13.5px}
+
+.e{cursor:pointer;border-radius:4px;padding:0 3px;margin:0 -1px;
+ text-decoration:none;border-bottom:1.5px dotted currentColor;
+ -webkit-tap-highlight-color:transparent;position:relative}
+.e-plat{color:var(--plat);background:var(--plat-s)}
+.e-prog{color:var(--prog);background:var(--prog-s)}
+.e-team{color:var(--team);background:var(--team-s)}
+.e-pers{color:var(--pers);background:var(--pers-s)}
+.e-tool{color:var(--tool);background:var(--tool-s)}
+.e-jrg{color:var(--jrg);background:var(--jrg-s)}
+
+/* tooltip — hover on pointer devices, tap-toggle everywhere */
+.e::after{content:attr(data-k);position:absolute;left:50%;bottom:calc(100% + 7px);
+ transform:translateX(-50%) translateY(4px);
+ background:var(--ink);color:var(--paper);border-radius:7px;
+ padding:5px 10px;white-space:nowrap;z-index:20;
+ font:600 11.5px/1.35 ui-monospace,"SF Mono",monospace;letter-spacing:.03em;
+ text-transform:uppercase;
+ opacity:0;pointer-events:none;transition:opacity .13s ease,transform .13s ease;
+ box-shadow:0 3px 12px rgba(0,0,0,.22)}
+.e.on::after{opacity:1;transform:translateX(-50%) translateY(0)}
+@media (hover:hover){.e:hover::after{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+.ratings{display:flex;gap:9px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+.rat{background:var(--card);border:1px solid var(--line);border-radius:11px;
+ padding:12px 18px;text-align:center;flex:1 1 150px;max-width:210px}
+.rat .c{font:600 10.5px/1 ui-monospace,monospace;letter-spacing:.13em;text-transform:uppercase;
+ color:var(--ink3);margin-bottom:7px}
+.rat .v{font:400 19px/1.1 "Iowan Old Style",Georgia,serif;color:var(--ink2)}
+.rat.x .v{color:var(--ac);font-weight:600}
+
+/* criteria disclosure */
+details.crit{margin:0 0 34px;background:var(--card);border:1px solid var(--line);
+ border-radius:13px;overflow:hidden}
+details.crit summary{padding:14px 19px;cursor:pointer;font:600 13px/1.4 ui-monospace,monospace;
+ letter-spacing:.05em;color:var(--ac);list-style:none;-webkit-tap-highlight-color:transparent}
+details.crit summary::-webkit-details-marker{display:none}
+details.crit summary::after{content:" ▾";color:var(--ink3)}
+details.crit[open] summary::after{content:" ▴"}
+.crit .in{padding:2px 19px 19px;font-size:14.5px;color:var(--ink2);line-height:1.62}
+.crit .in > p{margin-bottom:13px}
+.cg{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:11px}
+.cg .cn{font:600 11px/1 ui-monospace,monospace;letter-spacing:.13em;text-transform:uppercase;
+ color:var(--ac);margin-bottom:9px}
+.cg ul{margin:0;padding-left:18px}
+.cg li{margin:4px 0;font-size:14px}
+.cg li b{color:var(--ink)}
+.cap{background:var(--note-s);border-left:3px solid var(--note);border-radius:0 8px 8px 0;
+ padding:11px 14px;margin-top:4px;font-size:14px}
+
+.field{margin-bottom:40px}
+.field > h2{font:400 13px/1.4 ui-monospace,"SF Mono",monospace;letter-spacing:.14em;
+ text-transform:uppercase;color:var(--ac);padding-bottom:11px;border-bottom:2px solid var(--ac);
+ margin-bottom:8px;display:flex;justify-content:space-between;align-items:baseline;gap:11px}
+.field > h2 .wc{font-size:11px;color:var(--ink3);letter-spacing:.03em;white-space:nowrap}
+.prompt{font-size:14px;font-style:italic;color:var(--ink3);margin-bottom:24px;
+ padding:13px 0 0;line-height:1.6}
+.prompt strong{font-style:normal;font-weight:600;color:var(--ink2)}
+
+.body p{margin-bottom:19px}
+.body h3{font:600 12px/1 ui-monospace,monospace;letter-spacing:.17em;text-transform:uppercase;
+ color:var(--ac);margin:32px 0 15px}
+.body b{font-weight:600}
+.tracks{background:var(--card);border:1px solid var(--line);border-radius:11px;
+ padding:14px 17px;margin-bottom:19px;font-size:15px;line-height:1.65;color:var(--ink2)}
+.tracks .tk{font-weight:600;color:var(--ink)}
+
+.foot{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);color:var(--ink3);
+ font-size:13px;text-align:center;font-style:italic}
+
+@media (max-width:620px){
+ h1{font-size:27px}
+ body{font-size:16.5px;line-height:1.72}
+ .wrap{padding:0 18px}
+ header{padding:34px 0 18px}
+ .rat{flex:1 1 100%;max-width:none;padding:10px 16px;
+  display:flex;justify-content:space-between;align-items:baseline;text-align:left}
+ .rat .c{margin-bottom:0}
+ .rat .v{font-size:17px}
+ .ratings{gap:7px}
+ /* tooltips: left-align to avoid clipping on narrow screens */
+ .e::after{white-space:normal;min-width:120px;max-width:min(74vw,260px);
+  left:0;transform:translateX(0) translateY(4px);text-align:left}
+ .e.on::after{transform:translateX(0) translateY(0)}
+}
+</style></head><body>
+
+<div class="wrap">
+<header>
+ <div class="eb">Proofreading copy</div>
+ <h1>Annual Self-Assessment</h1>
+ <div class="sub">Two text boxes, submitted as written. Draft 7.</div>
+</header>
+
+<div class="hello">
+ <span class="t">Hello, and thank you 💛</span>
+ <p>This is my annual performance self-assessment. There are only <b>two boxes</b> to fill in on
+ the form, so it reads as two long passages rather than a list.</p>
+ <p><b>What I need from you is a reader's eye, not a technical one.</b> There is a lot of internal
+ jargon in here and none of it matters for what I'm asking. Specifically:</p>
+ <ul>
+  <li>Does it <b>flow</b>, or does it get tangled? Any sentence you had to read twice?</li>
+  <li>Does it sound like <b>me</b>, or does it sound like a corporate robot?</li>
+  <li>Anywhere I sound like I'm <b>bragging</b>, or the opposite, <b>underselling</b>?</li>
+  <li>Anything <b>repetitive</b>? I've been through seven drafts and I have gone word-blind.</li>
+  <li>Typos, clunky phrasing, sentences that run on too long.</li>
+ </ul>
+ <p>The second box is where I talk about what I want next year and what I was not good at.
+ <b>Does the honest part read as honest, or does it read as apologizing?</b> That is the one I am
+ least sure about.</p>
+</div>
+
+<div class="legend">
+ <span class="t">Coloured words</span>
+ <div class="h">Tap any coloured word (or hover, on a computer) to see what kind of thing it is.
+ You never need to know what they actually <em>are</em>.</div>
+ <div class="lg">
+  <span class="e e-plat" data-k="Platform">a platform</span>
+  <span class="e e-prog" data-k="Program / project">a program or project</span>
+  <span class="e e-team" data-k="Team / org">a team or organisation</span>
+  <span class="e e-pers" data-k="Person">a person</span>
+  <span class="e e-tool" data-k="Tool I built">a tool I built</span>
+  <span class="e e-jrg" data-k="Internal jargon">internal jargon</span>
+ </div>
+</div>
+
+<div class="ratings">
+ <div class="rat"><div class="c">Teamwork</div><div class="v">Achieved</div></div>
+ <div class="rat x"><div class="c">Innovation</div><div class="v">Exceeded</div></div>
+ <div class="rat"><div class="c">Results</div><div class="v">Achieved</div></div>
+</div>
+
+<details class="crit">
+ <summary>What the three ratings are actually measured against</summary>
+ <div class="in">
+  <p>The form scores each of the three on <b>Expected More</b> / <b>Achieved Expectations</b> /
+  <b>Exceeded Expectations</b>, and lists five things under each. This is what the writing is
+  aiming at, in case it helps you judge whether it lands.</p>
+
+  <div class="cg"><div class="cn">Teamwork · Achieved</div>
+   <ul>
+    <li>Cultivated relationships and worked collaboratively</li>
+    <li>Communicated openly and effectively</li>
+    <li><b>Positively influenced the performance of the team</b></li>
+    <li>Provided leadership and inspiration to others</li>
+    <li>Encouraged others to share their perspectives</li>
+   </ul>
+   <div class="cap">The <b>bolded</b> one is the only place I deliberately hold back. No colleague
+   has picked up one of my methods yet, so I don't claim it — which is exactly why the second
+   goal in Box Two exists.</div>
+  </div>
+
+  <div class="cg"><div class="cn">Innovation · Exceeded</div>
+   <ul>
+    <li>Approached problems with creativity, curiosity, and new ideas</li>
+    <li>Applied expertise to find better ways to do things</li>
+    <li>Focused on details that produce excellence</li>
+    <li>Took smart, courageous risks</li>
+    <li>Included perspectives of others in pursuit of the best approach or idea</li>
+   </ul>
+  </div>
+
+  <div class="cg"><div class="cn">Results · Achieved</div>
+   <ul>
+    <li>Produced high-quality outcomes</li>
+    <li>Accomplished goals and objectives on time</li>
+    <li>Exercised good judgment and took responsibility for decisions</li>
+    <li>Exemplified Apple's values and supported a culture of inclusion for all</li>
+    <li>Enriched the customer experience</li>
+   </ul>
+  </div>
+
+  <div class="cap"><b>One thing to know before you read.</b> I picked modest ratings on purpose and
+  then wrote the evidence at full strength. The gap between the two is deliberate — it reads better
+  to be under-claimed and well-evidenced than the reverse. So if a passage feels stronger than
+  "Achieved" suggests, that's the design, not a mistake. <b>Please don't soften it.</b></div>
+ </div>
+</details>
+
+<!-- ══════════ BOX ONE ══════════ -->
+<div class="field">
+ <h2>Box one · Accomplishments &amp; Growth <span class="wc">≈1,240 words</span></h2>
+ <div class="prompt"><strong>The form asks:</strong> What were your key achievements this year?
+ Consider highlighting your contributions through the lens of Teamwork, Innovation, and Results.
+ What capabilities have you focused on building over the past year?</div>
+ <div class="body">
+
+ <p>This review year spanned two roles and two transitions running in opposite directions at the
+ same time. Through January I ran <span class="e e-plat" data-k="Platform">AppleCare Connect</span>
+ as <span class="e e-jrg" data-k="Role — program manager">EPM</span>. In February I moved to
+ Solutions Architect in <span class="e e-team" data-k="Team / org">IS&amp;T Customer Systems</span>,
+ and the months that followed meant handing off the platform I was leaving while absorbing the
+ <span class="e e-team" data-k="Team / org">CS-PS</span> solution-architecture scope.</p>
+
+ <p>The two roles were not separate programs. Before February I worked
+ <span class="e e-prog" data-k="Program / project">Panorama</span> from the business-requirements
+ side and built the <span class="e e-plat" data-k="Platform">ACC</span> reseller-channel integration
+ requirement set; I am a named approver on the
+ <span class="e e-plat" data-k="Platform">ACC Product</span> sections of both program
+ <span class="e e-jrg" data-k="Document type — requirements doc">BRDs</span>. In February I moved
+ to the architecture side of the same program with a scope well beyond
+ <span class="e e-plat" data-k="Platform">ACC</span>. Having written the requirements I then had to
+ satisfy as the architect is a large part of why the absorption went as quickly as it did.</p>
+
+ <h3>Teamwork</h3>
+
+ <p>Both transitions were about making other people able to operate independently, and they
+ overlapped. The <span class="e e-plat" data-k="Platform">AppleCare Connect</span> handoff to
+ <span class="e e-pers" data-k="Person">Paul Nugent</span> as incoming business owner ran from
+ January into April. It was not a shutdown; it was transferring a live system to someone who had to
+ run it. <span class="e e-pers" data-k="Person">Paul</span> needed the whole operating surface
+ rather than the architecture alone: a focus-category framework separating analysis, operational
+ support, testing support and strategy; the stakeholder topology across six organizations
+ (<span class="e e-team" data-k="Teams / orgs">WW Sales, Systems Support, AppleCare, Finance,
+ Marketing and Legal</span>) with named contacts in each; the monitoring dashboards and alerting;
+ the trending-issue workflows together with their root-cause analyses; the data-correction and
+ request processes; and the enhancement backlog with its supporting
+ <span class="e e-jrg" data-k="Ticket system">radar</span> inventory. Consultation stayed open
+ through the spring and is now rare, which is the signal that matters: the platform runs without
+ me. A handoff is only real if the next owner can operate without the previous one, and that meant
+ transferring the relationship map along with the architecture.</p>
+
+ <p>Absorbing the <span class="e e-team" data-k="Team / org">CS-PS</span> scope was the inverse
+ problem. <span class="e e-pers" data-k="Person">Andrew Lambdin-Abraham</span> was the tenured
+ <span class="e e-jrg" data-k="Role — directly responsible individual">DRI</span> and
+ subject-matter expert for the full portfolio, and I took it on within five months of joining, not
+ only representing every product in it but assuming primary ownership of a large program already in
+ full swing. We set a mid-July internal target and an end-July external commitment; both were met.
+ <span class="e e-pers" data-k="Person">Andrew</span> was on break through August while the scope
+ ran solo, with no coverage gap across the
+ <span class="e e-jrg" data-k="Ticket system">radar</span> queue, the cross-functional sync cadence
+ or partner-facing coordination, including a
+ <span class="e e-jrg" data-k="Severity — highest-urgency issue">P1</span> covered without
+ escalation. <span class="e e-pers" data-k="Person">Andrew</span> got a clean exit and my manager's
+ portfolio never had a hole in it.</p>
+
+ <p>The two directions were different kinds of work rather than different amounts of it.
+ <span class="e e-plat" data-k="Platform">ACC</span> was one platform owned end to end: its
+ operations, its partner relationships, its billing integrity, its failure modes. Handing it over
+ meant transferring an operating practice. The
+ <span class="e e-prog" data-k="Program / project">Panorama</span> scope is an integration surface,
+ spanning <span class="e e-plat" data-k="Platforms / systems">CDM, EventHub, DataHub, Case, GCRM
+ Admin, Griffin, PDM, EDM and RDM</span> among the systems involved, where the work is reasoning
+ about how systems agree, where state should live, and which team owns which boundary. Moving
+ between them meant changing the kind of thinking, from operating one platform deeply to holding
+ the relationships among many. Running both directions at once through the spring meant carrying
+ two postures simultaneously: documenting for someone else's independence while building my own.</p>
+
+ <p>Four reusable practices came out of the year in transferable form: a two-pass
+ <span class="e e-jrg" data-k="Ticket system">radar</span> filing method that prevents incomplete
+ <span class="e e-jrg" data-k="Ticket system">radars</span> reaching engineering, a stakeholder
+ communication pattern set, the solution documentation lifecycle from brief through design through
+ impact assessment, and a governance rule routing architectural challenges through
+ <span class="e e-team" data-k="Team / org">CS-PS</span> internal alignment before external
+ escalation. Those practices are visible in the work itself rather than as documents on a shelf:
+ the impact assessments and <span class="e e-jrg" data-k="Ticket system">radars</span> going to
+ engineering are consistently structured, with content validated before filing rather than after,
+ so engineering teams receive the same shape every time. Stakeholders can also see work status
+ themselves rather than requesting it, since the live
+ <span class="e e-team" data-k="Team / org">CS-PS</span> portfolio dashboard suite went up this
+ year, which directly answers feedback about designing for consumers outside my own team.</p>
+
+ <p>The coordination surface was wide in both halves of the year: as
+ <span class="e e-jrg" data-k="Role — program manager">EPM</span>,
+ <span class="e e-team" data-k="Teams / orgs">IS&amp;T development and support</span>,
+ <span class="e e-team" data-k="Teams / orgs">Finance across credit and collections</span>, and
+ three partner-management organizations among others, including arbitrating competing scope
+ requests from more than seventeen business holding units; as Solutions Architect,
+ <span class="e e-team" data-k="Teams / orgs">Support Sales, Support Experience and EW
+ Service</span> among others. Coordinating across those time zones worked better once meeting times
+ rotated rather than defaulting to a single region's working hours, so the early and late slots
+ moved between groups each cycle rather than always landing on the same teams.</p>
+
+ <h3>Results</h3>
+
+ <p><span class="e e-prog" data-k="Program / project">Panorama</span> is the umbrella, and its
+ breadth is the point. Design ownership ran across both program tracks.</p>
+
+ <div class="tracks">
+  <span class="tk">Support and Service Sales</span> — organization lifecycle and base creation,
+  agreement eligibility and creation, and agreement lifecycle notifications.<br>
+  <span class="tk">Support Experience</span> — support event notifications across internal and
+  external consumers, enterprise case management, and enterprise case and agreement lookup.
+ </div>
+
+ <p>Each of those sits on a different combination of systems, and several required reconciling
+ designs that different teams had already committed to. Both tracks were unblocked this year. The
+ Support track had been waiting on a specification, and once it had one, engineering built from a
+ specification rather than a discussion. On the Sales track the
+ <span class="e e-prog" data-k="Design deliverable">Agreement Lifecycle</span> design closed,
+ settling the <span class="e e-plat" data-k="Platform">ACC</span>-boundary questions that had been
+ open since the program started.</p>
+
+ <p>Three of those reconciliations are worth naming, because in each case the work was taking
+ responsibility for a decision that had already been made and was wrong. On the
+ <span class="e e-prog" data-k="Design deliverable">Agreement Lifecycle</span> design, three
+ meetings across a single week had produced three incompatible positions on where organization
+ state should live. Correlating them into one
+ <span class="e e-prog" data-k="Design deliverable">Unified Enrichment Model</span> meant splitting
+ the API scope so <span class="e e-plat" data-k="Platform">CDM</span> orchestrates rather than
+ stores, and separating the front-end pre-check layer from
+ <span class="e e-plat" data-k="Platform">CDM</span>'s authoritative verification. That separation
+ dissolved a perceived-duplication objection which had blocked sign-off in two previous sessions.
+ The model survived a fourth refinement meeting with the
+ <span class="e e-plat" data-k="Platform">CDM</span> lead, the departing
+ <span class="e e-jrg" data-k="Role — directly responsible individual">DRI</span> and both
+ managers, and was promoted from proposal to design of record. It also produced a governance
+ commitment: no further architectural reversals on that design without
+ <span class="e e-team" data-k="Team / org">CS-PS</span> internal alignment first.</p>
+
+ <p>On the <span class="e e-prog" data-k="Program / project">Premier ePoC</span> contact-source
+ question, three separate impact assessments from three organizations contradicted each other.
+ Rather than arbitrate between citations, the better way through was to argue the paradigm
+ underneath them: enterprise administrator contacts rotate and consumer contacts do not, so they
+ cannot share a storage model even on a shared endpoint. Whoever fetches the contact must be
+ present in the flow at send time, which resolved the design before the likely compromise position
+ could be proposed. That went to eleven stakeholders and closed. On the
+ <span class="e e-plat" data-k="Platform">Case</span>
+ <span class="e e-jrg" data-k="Ticket system">radar</span> scope, three committed
+ <span class="e e-jrg" data-k="Ticket system">radars</span> were held to their existing scope ahead
+ of a demo and additions routed to net-new
+ <span class="e e-jrg" data-k="Ticket system">radars</span> instead, keeping prior commitments
+ stable rather than renegotiating them under time pressure.</p>
+
+ <p>Alongside <span class="e e-prog" data-k="Program / project">Panorama</span> I carried the
+ <span class="e e-prog" data-k="Planning process — next-year intake">FY27 PLOE</span> assessments
+ assigned to me, which is the planning intake for next year's
+ <span class="e e-team" data-k="Team / org">CS-PS</span> work rather than delivery work, plus one
+ project in a supporting capacity. On the
+ <span class="e e-prog" data-k="Program / project">V1 Support Sales</span> playback a cut-over gap
+ surfaced before it reached users rather than after. Through January the
+ <span class="e e-plat" data-k="Platform">AppleCare Connect</span> work was operational stewardship:
+ holding the transactional-integrity and billing frameworks established the prior cycle at their
+ reduced steady state, and carrying the <span class="e e-prog" data-k="Program / project">DIA</span>
+ billing roadmap from approved requirements into an executing implementation program.</p>
+
+ <h3>Innovation</h3>
+
+ <p>The <span class="e e-prog" data-k="Program / project">ACE Tier</span> simplification is where
+ architectural judgment mattered most. The business moved the deadline twice inside three weeks.
+ Partway through it became clear our own proposed manual bulk-override approach was the wrong shape,
+ so I brought the team to a config-collapse design instead, reframing the work as a configuration
+ change rather than a code change, and we landed it against the moved date. Discarding our own prior
+ proposal mid-flight was a risk worth taking; it cost some rework and it held.</p>
+
+ <p>Two further decisions this year were pattern choices rather than documents. For the Support
+ track I chose a three-stage signal, classify and enrich pipeline over a single-pass handler. The
+ detail that mattered was recognizing classification as the volatile part: the case-event taxonomy
+ was still being renamed in workshops mid-design, and separating classification from ingestion and
+ enrichment meant the taxonomy could churn without touching either neighbour. It did churn,
+ repeatedly, and the pipeline held. For the Sales track I chose a correlator pattern to hold
+ agreement state across systems that do not share a transaction boundary, which shifted ownership
+ of whether an agreement exists to <span class="e e-plat" data-k="Platform">CDM</span> and let
+ <span class="e e-plat" data-k="Platform">EventHub</span> drop persistent per-organization state.
+ That is what let the <span class="e e-plat" data-k="Platform">ACC</span>-boundary questions close
+ rather than stay open indefinitely.</p>
+
+ <p>Two internal tools changed how quickly I could operate in an unfamiliar estate.
+ <span class="e e-tool" data-k="Tool I built">Wayfinder</span> maps the department's product
+ infrastructure: what exists, who owns it, how it connects.
+ <span class="e e-tool" data-k="Tool I built">Connections</span> does the same for people and
+ working relationships. Both were built in my first weeks in the role, and together they gave me a
+ navigable model of <span class="e e-team" data-k="Team / org">Customer Systems</span> and the wider
+ <span class="e e-team" data-k="Team / org">IS&amp;T</span> surface. That is a substantial part of
+ why absorbing the <span class="e e-prog" data-k="Program / project">Panorama</span> scope took five
+ months rather than a year, and why I can answer ownership and dependency questions directly rather
+ than by asking around. Both are extensions of the GenAI-assisted method I have been developing for
+ architecture work more broadly, covering documentation lifecycle, requirements synthesis and
+ meeting-to-decision capture, which is also what let me codify those four practices into a form
+ other people can use. When my manager told me the
+ <span class="e e-tool" data-k="Tool I built">Wayfinder</span> positioning was too diffuse, the
+ useful move was to take the critique rather than defend the framing, and the restructure that came
+ out of it was better than what I had.</p>
+
+ <p>The <span class="e e-prog" data-k="Program / project">Panorama</span> partner-ecosystem
+ architecture I designed in the prior cycle moved into implementation this year; this year's
+ contribution to it was the pattern choices above.</p>
+
+ <h3>Capabilities built</h3>
+
+ <p>The capability I invested in most deliberately was the solution documentation lifecycle,
+ treating solution briefs, design documents and system impact assessments as a connected
+ progression rather than separate artifacts. Writing the brief before deep engineering engagement
+ forces the "why this direction and not another" question early, when it is still cheap to answer.
+ Technical depth across the <span class="e e-team" data-k="Team / org">Customer Systems</span>
+ integration surface was the second focus:
+ <span class="e e-plat" data-k="Platforms / systems">CDM, PDM, IDM, EDM, SAP and Griffin</span>, and
+ specifically how event and agreement data moves between them. This was the growth area my manager
+ and I identified before I took the role, and
+ <span class="e e-prog" data-k="Program / project">Panorama</span> has been the vehicle for it.
+ Third, cross-organizational governance, settling into a practice of triaging architectural
+ challenges through <span class="e e-team" data-k="Team / org">CS-PS</span> internal alignment
+ first, which resolves most of them without external escalation and makes the ones that do escalate
+ better formed. Finally, and most deliberately: framing work in terms of outcome rather than
+ mechanism, naming who benefits and by how much, in their language rather than the system's. That
+ changed how I write briefs, how I structure
+ <span class="e e-jrg" data-k="Ticket system">radars</span>, and how I open a stakeholder
+ conversation.</p>
+
+ </div>
+</div>
+
+<!-- ══════════ BOX TWO ══════════ -->
+<div class="field">
+ <h2>Box two · Goals &amp; Development <span class="wc">≈700 words</span></h2>
+ <div class="prompt"><strong>The form asks:</strong> Knowing what our team needs to accomplish, what
+ goals would you like to establish for the coming year? In what areas could you develop? How can
+ your manager best support you? How will you develop skills or use emerging technologies, such as
+ AI, to enhance your work?</div>
+ <div class="body">
+
+ <p>The most useful thing I can say about this year is that the innovation side worked and the
+ narration of it did not. The methods, the tooling and the design patterns are real, and their value
+ has been mostly limited to my own work, because I have been better at building them than at
+ documenting the results or getting them into anyone else's hands. That is the sequence I want to
+ invert in <span class="e e-prog" data-k="Fiscal year — next year">FY27</span>: use teamwork as the
+ vehicle, getting the practices adopted, the tooling portable and the outcomes narrated, and let
+ that show up on the Results side where it belongs.</p>
+
+ <p><b>Goals for <span class="e e-prog" data-k="Fiscal year — next year">FY27</span>.</b> Four, in
+ priority order, each with a way to tell whether it happened. First, own a solution end to end
+ through a full cycle, from discovery and design through delivery playback and production handoff,
+ rather than joining mid-flight. My candidate is the
+ <span class="e e-prog" data-k="Program / project">Case Lifecycle Event Service</span>: I own the
+ design already, so carrying it into delivery and production handoff would close the loop on the
+ <span class="e e-jrg" data-k="Software development lifecycle">SDLC</span> understanding I have
+ been building rather than starting from something new. Done means it is in production and handed
+ off.</p>
+
+ <p>Second, get one of the four documented practices used by another
+ <span class="e e-jrg" data-k="Role — solutions architect">SA</span>, starting with the two-pass
+ <span class="e e-jrg" data-k="Ticket system">radar</span> filing method. Deliberately small: one
+ peer, one method. Done means a named person is using it without me in the room. Third, make
+ <span class="e e-tool" data-k="Tool I built">Wayfinder</span> usable by an incoming
+ <span class="e e-jrg" data-k="Role — solutions architect">SA</span> rather than only by me, scoped
+ to the new-hire case. Done means someone joining
+ <span class="e e-team" data-k="Team / org">CS-PS</span> can answer ownership and dependency
+ questions from it without asking me. Fourth, present architectural work directly to leadership two
+ or three times across the year, treated as committed deliverables rather than opportunistic ones. A
+ design playback, a program review or a written brief each count. Done is a count.</p>
+
+ <p>Two longer-horizon directions sit behind those, and I would not claim either as a one-year
+ deliverable. The first is reasoning confidently about integration trade-offs, consistency models,
+ event ordering guarantees and failure semantics without needing to consult, which accrues through
+ repeated exposure rather than a single project. The second is moving the
+ <span class="e e-team" data-k="Team / org">CS-PS</span> scope from inherited to deliberately
+ planned, which depends on the <span class="e e-prog" data-k="Fiscal year — next year">FY27</span>
+ scope boundaries being set first.</p>
+
+ <p><b>Where I could develop, and how you can help.</b> The hardest part of this year was not any
+ single design; it was holding the volume without dropping anything while still learning the
+ environment. A large inherited scope, a live program and a
+ <span class="e e-prog" data-k="Planning process — next-year intake">PLOE</span> cycle running
+ concurrently made the tracking burden real, and early on I was carrying too much of it in my head.
+ That is the honest reason I built tooling for it rather than only for the design work: keeping the
+ record of what was decided, by whom, and what was still open turned out to be the constraint on
+ how fast I could move. It is better than it was and it is not finished.</p>
+
+ <p>On the leadership-visibility goal, sponsorship into the right forums would help more than
+ anything I can arrange myself: knowing which reviews are the right venue, and having an
+ introduction into them. This was guidance I received two years ago that I have not adequately
+ closed, and I would rather name it than let it carry forward again. The
+ <span class="e e-prog" data-k="Planning system">Clarity</span> idea assignments have also been the
+ most effective onboarding mechanism I have had, since each one forces me into a new corner of the
+ estate with a real deliverable attached, and I would like that to continue as a deliberate growth
+ vehicle rather than incidental workload.</p>
+
+ <p><b>Emerging technologies and AI.</b> I have been developing GenAI-assisted method for
+ architecture work rather than treating AI as a drafting shortcut, and the distinction matters. The
+ value has come from applying it to the structural parts of the job: documentation lifecycle,
+ requirements synthesis, and turning meetings into recorded decisions with named owners instead of
+ recollections. That is what let me codify four working practices into a form other people can pick
+ up. It is already in use at design time, pressure-testing a solution brief before engineering sees
+ it, which is considerably cheaper than finding the gap in review. None of it works without
+ judgment in the loop and active context-shaping; the output is augmentation, not answers. The
+ honest assessment of where I have spent my effort is that I have been weighted toward building the
+ tooling rather than applying it. That is the shift for
+ <span class="e e-prog" data-k="Fiscal year — next year">FY27</span>: finish the tool work to the
+ point it is portable, then spend the time on application and on making it usable by peers rather
+ than personal. <span class="e e-tool" data-k="Tool I built">Wayfinder</span> and
+ <span class="e e-tool" data-k="Tool I built">Connections</span> are the clearest test case, since
+ they turned "who owns this and what does it connect to" from a question I had to ask into one I can
+ answer, and that value should not stay limited to me.</p>
+
+ </div>
+</div>
+
+<div class="foot">Thank you for reading. Any note is a useful note, including “this bit is boring.”</div>
+
+</div>
+
+<script>
+document.addEventListener('click',function(ev){
+ var t=ev.target.closest('.e');
+ document.querySelectorAll('.e.on').forEach(function(n){if(n!==t)n.classList.remove('on')});
+ if(t){t.classList.toggle('on');ev.preventDefault()}
+},false);
+</script>
+</body></html>
